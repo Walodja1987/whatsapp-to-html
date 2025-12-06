@@ -419,11 +419,18 @@ def generate_html(messages, folder_name, output_path):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preload" as="image" href="background.jpg">
 <title>{escape(chat_title)}</title>
 <style type="text/css">
 {css_template}
 </style>
 <script>
+// Preload background image to prevent flash on load and navigation
+(function() {{
+    const bgImage = new Image();
+    bgImage.src = 'background.jpg';
+}})();
+
 // Scroll buttons functionality
 (function() {{
     const container = document.querySelector('ol.conversation');
