@@ -14,7 +14,7 @@ A Python tool that converts exported WhatsApp chat files into beautifully format
 Clone this repository to your local machine. The directory structure should look like this:
 ```
 whatsapp-beautifier/
-├── whatsapp_beautifier.py
+├── convert_whatsapp_to_html.py
 ├── style.css
 ├── background.jpg
 ├── README.md
@@ -47,13 +47,13 @@ whatsapp-beautifier/
 ### Step 2: Prepare Your Data
 
 * Extract the zip file on your local machine
-* Place the extracted folder within the cloned repository (where the `whatsapp_beautifier.py` file resides).
+* Place the extracted folder within the cloned repository (where the `convert_whatsapp_to_html.py` file resides).
 * Name the extracted folder to whatever you like (e.g., `my_whatsapp_data`). Avoid using special characters like ä, ö, ü, etc., to prevent issues during processing.
 
 Your directory structure should now look like this:
 ```
 whatsapp-beautifier/
-├── whatsapp_beautifier.py
+├── convert_whatsapp_to_html.py
 ├── style.css
 ├── background.jpg
 ├── README.md
@@ -69,7 +69,7 @@ whatsapp-beautifier/
 Run the Python script with your folder name as an argument (ensure you have Python 3 installed on your system):
 
 ```bash
-python3 whatsapp_beautifier.py my_whatsapp_data
+python3 convert_whatsapp_to_html.py my_whatsapp_data
 ```
 
 Replace `my_whatsapp_data` with the name of your WhatsApp data folder.
@@ -105,7 +105,7 @@ After running the script, your directory structure should look like this:
 
 ```
 whatsapp-beautifier/
-├── whatsapp_beautifier.py
+├── convert_whatsapp_to_html.py
 ├── style.css
 ├── background.jpg
 ├── README.md
