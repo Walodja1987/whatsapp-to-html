@@ -31,7 +31,7 @@ body {
 }
 
 #wrapper {
-  max-width: 42rem; /* 672px - matches max-w-2xl */
+  max-width: 72rem; /* 672px - matches max-w-2xl */
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
@@ -157,7 +157,7 @@ ol.conversation li.right {
 }
 
 ol.conversation li ol.messages {
-  max-width: 75%;
+  max-width: 31.5rem;
   overflow: hidden;
   list-style: none;
   margin: 0;

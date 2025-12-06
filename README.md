@@ -87,7 +87,7 @@ Replace `my_whatsapp_data` with the name of your WhatsApp data folder.
 
 - You can replace `background.jpg` with your own background image
 - The file must be named `background.jpg`
-- Place it in the same directory as the script
+- You can find free background images on [freepik.com](https://www.freepik.com/free-photos-vectors/simple-doodle-background/3#uuid=8c9be20a-6071-4b39-ac3a-94efe1277c55)
 
 ## File Structure
 
