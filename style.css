@@ -1,813 +1,488 @@
-
-    body
-    {
-        font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", "Android Emoji", "EmojiOne Color", "EmojiOne Mozilla", "Twemoji Mozilla", "Noto Emoji", "Arial Unicode MS", Helvetica, Verdana, Arial, Geneva, sans-serif;
-        background: rgb(255,255,255);
-        padding: 0;
-        margin: 0;
-    }
-
-    .title_emoticon
-    {
-        width:  30pt;
-    }
-
-    .message_emoticon
-    {
-        width: 14pt;
-    }
-
-    .message_emoticon_only
-    {
-        width:  24pt;
-    }
-
-    .user-name_emoticon
-    {
-        width:  11pt;
-    }
-
-    /* avoid IE blue borders arround images */
-    a img
-    {
-        border: none;
-        outline: none;
-    }
-
-    /* avoid default lists render */
-    header, nav, section, article, footer
-    {
-        display: block;
-        position: relative;
-    }
-
-    ol
-    {
-        padding: 0;
-        margin: 0;
-    }
-
-    ol li
-    {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    p
-    {
-        padding: 10px 5px;
-        margin: 0;
-    }
-
-    a
-    {
-        color: rgb(41,171,226);
-        outline: none;
-        text-decoration: none;
-        transition: 0.3s;
-    }
-
-    a:hover, a:focus, a:active
-    {
-        color: rgb(0,113,188);
-        outline: none;
-        text-decoration: underline;
-        transition: 0.3s;
-    }
-
-    .clear
-    {
-        display: block;
-        padding: 0;
-        margin: 0;
-        clear: both;
-        float: none;
-    }
-
-    /* scrollbar effects (for webkit only) */
-    ::-webkit-scrollbar
-    {
-        width: 10px;
-        height: 10px;
-        overflow: hidden;
-    }
-
-    ::-webkit-scrollbar-button,
-    ::-webkit-scrollbar-button:start:decrement,
-    ::-webkit-scrollbar-button:end:increment
-    {
-        display: none;
-        width: 0;
-        height: 0;
-    }
-
-    ::-webkit-scrollbar-track-piece
-    {
-        background: #e5e5e5;
-        border: 1px solid rgba(0,0,0,0.05);
-    }
-
-    ::-webkit-scrollbar-thumb:vertical
-    {
-        background: #c5c5c5;
-        border-top: 1px solid rgba(0,0,0, 0.08);
-        border-bottom: 1px solid rgba(0,0,0, 0.08);
-        box-shadow: 0px 5px 7px rgba(0,0,0, 0.15);
-    }
-
-    /* wrapper */
-    #wrapper
-    {
-        width: 80%;
-        max-width: 640px;
-        padding: 100px 0 50px 0;
-        margin: 0 auto;
-    }
-
-    /* header title */
-    .title
-    {
-        position: fixed;
-        z-index: 999;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background: rgba(255,255,255,0.95);
-        border-bottom: 1px solid rgba(0,0,0,0.03);
-    }
-
-    .title .content
-    {
-        position: relative;
-        width: 95%;
-        max-width: 960px;
-        margin: 0 auto;
-        padding: 10px 0;
-    }
-
-    .title h1
-    {
-        font-weight: lighter;
-        font-size: 30pt;
-        color: rgba(0,0,0, 0.5);
-        text-align: center;
-        padding: 5px 0;
-        margin: 0;
-        text-shadow: 1px 1px 0px rgba(255,255,255, 1);
-    }
-
-    /* header navigation buttons */
-    a.nav-button
-    {
-        display: inline-block;
-        padding: 5px 10px;
-        margin: 0;
-        color: rgba(0,0,0, 0.5);
-        text-align: center;
-        text-decoration: none;
-        background: rgba(0,0,0,0.2);
-        border: 1px solid rgba(0,0,0, 0.1);
-        border-radius: 6px;
-        transition: 0.25s;
-        -webkit-backface-visibility: hidden;
-        box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.15);
-    }
-
-    a.nav-button:hover,
-    a.nav-button:focus
-    {
-        background: rgb(41,171,226);
-        outline: none;
-        transition: 0.25s;
-        -webkit-backface-visibility: hidden;
-        box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
-    }
-
-    a.nav-button:active
-    {
-        background: rgb(0,113,188);
-        transition: 0.25s;
-        -webkit-backface-visibility: hidden;
-        box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.3);
-    }
-
-    a.nav-button img
-    {
-        display: inline-block;
-        margin: 0 5px;
-        width: 20px;
-        height: 20px;
-        opacity: 0.55;
-        transition: opacity 300ms ease-out;
-    }
-
-    a.nav-button:hover img
-    {
-        opacity: 0.8;
-        transition: opacity 500ms ease-out;
-    }
-
-    /* header copyright */
-    p.copyright
-    {
-        display: inline-block;
-        float: right;
-        font-size: 10pt;
-        font-weight: lighter;
-        color: rgba(0,0,0, 0.4);
-        text-shadow: 1px 1px 0px rgba(255,255,255, 0.8);
-    }
-
-    p.copyright a
-    {
-        color: rgba(52, 152, 219, 0.7);
-        text-decoration: none;
-    }
-
-    p.copyright a:hover
-    {
-        color: rgba(37, 116, 169, 1);
-    }
-
-    /* conversation */
-    ol.conversation
-    {
-        position: relative;
-        padding: 5px 0;
-        float: left;
-        width: 100%;
-        background-image: url("background.jpg");
-        background-repeat: repeat-y;
-        background-size: 100%;
-    }
-
-    ol.conversation li
-    {
-        position: relative;
-    }
-
-    /* date */
-    ol.conversation li.date-time p
-    {
-        font-size: 9pt;
-        color: rgba(0,113,188, 0.65);
-        text-align: center;
-        text-shadow: none;
-        padding: 35px 0 0 0;
-        margin: 0 auto;
-    }
-
-    ol.conversation:first-of-type li.date-time:first-of-type p
-    {
-        padding: 15px 0 0 0;
-    }
-
-    /* messages */
-    ol.conversation li.left
-    {
-        float: left;
-    }
-
-    ol.conversation li.right
-    {
-        float: right;
-    }
-
-    ol.conversation li ol.messages
-    {
-        padding: 0px 0;
-    }
-
-    /* messages > user infos */
-    ol.conversation li ol.messages li.user-picture
-    {
-        position: absolute;
-        bottom: 0;
-        overflow: hidden;
-        width: 40px;
-        height: 40px;
-        margin: 0;
-        border: none;
-        border-radius: 50%;
-        box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
-    }
-
-    ol.conversation li ol.messages li.user-picture img
-    {
-        display: block;
-        width: 101%;
-        height: auto;
-        top: -0.5%;
-        left: -0.5%;
-        margin: 0;
-        padding: 0;
-        border: none;
-        border-radius: 50%;
-    }
-
-
-    ol.conversation li.left ol.messages li.user-picture
-    {
-        left: 0;
-    }
-
-    ol.conversation li.right ol.messages li.user-picture
-    {
-        right: 0;
-    }
-
-    ol.conversation li ol.messages li.user-name
-    {
-        font-size: 10pt;
-        font-weight: bold;
-        color: rgb(102,102,102);
-        color: rgba(0,0,0,0.5);
-        margin-left: 60px;
-    }
-
-    ol.conversation li.right ol.messages li.user-name
-    {
-        margin: 0;
-    }
-
-    ol.conversation li.left ol.messages li.user-name p,
-    ol.conversation li.right ol.messages li.user-name p
-    {
-        text-align: left;
-    }
-
-    /* messages > hours */
-    ol.conversation li ol.messages li.message .hours
-    {
-        display: block;
-        position: absolute;
-        top: 40%;
-        font-size: 9pt;
-        color: rgba(0,0,0,0.5);
-        visibility: hidden;
-        opacity: 0;
-        transition: 0.8s;
-    }
-
-    ol.conversation li ol.messages li.message:hover .hours
-    {
-        visibility: visible;
-        opacity: 1;
-        transition: 0.5s;
-    }
-
-    ol.conversation li.left ol.messages li.message .hours
-    {
-        left: 130%;
-    }
-
-    ol.conversation li.right ol.messages li.message .hours
-    {
-        right: 130%;
-    }
-
-    /* messages > message types */
-    ol.conversation li ol.messages li.message
-    {
-        position: relative;
-        max-width: 450px;
-        font-size: 11pt;
-        font-weight: lighter;
-        margin: 3px 0;
-        padding: 10px 10px;
-        border-radius: 20px;
-        -webkit-border-radius: 20px;
-    }
-
-    ol.conversation li ol.messages li.message p,
-    ol.conversation li ol.messages li.message a
-    {
-        position: relative;
-        z-index: 2;
-        padding: 5px 0;
-    }
-
-    ol.conversation li.left ol.messages li.message
-    {
-        float: left;
-        clear: both;
-        color: rgb(102,102,102);
-        color: rgba(0,0,0,0.5);
-        background: rgb(230,230,230);
-        margin-left: 60px;
-    }
-
-    ol.conversation li.left ol.messages li.message a
-    {
-        color: rgb(52, 152, 219);
-    }
-
-    ol.conversation li.left ol.messages li.message a:hover,
-    ol.conversation li.left ol.messages li.message a:focus
-    {
-        color: rgb(37, 116, 169);
-    }
-
-    ol.conversation li.right ol.messages li.message
-    {
-        float: right;
-        clear: both;
-        color: rgb(255,255,255);
-        background: rgb(117,198,63);
-        margin-right: 60px;
-    }
-
-    ol.conversation li.right ol.messages li.message a
-    {
-        color: rgba(0,0,0,0.5);
-    }
-
-    ol.conversation li.right ol.messages li.message a:hover,
-    ol.conversation li.right ol.messages li.message a:focus
-    {
-        color: rgba(0,0,0,0.8);
-    }
-
-    ol.conversation li.right ol.messages li.imessage
-    {
-        color: rgb(255,255,255);
-        background: rgb(41,171,226);
-    }
-
-    /* messages > message types > bubble effect */
-    ol.conversation li.left ol.messages li.message:last-child::before
-    {
-        content: '';
-        position: absolute;
-        left: -7px;
-        bottom: -5px;
-        z-index: 0;
-        width: 24px;
-        height: 24px;
-        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAO1JREFUeNpiYBjqgBGf5LNnzxyAlAOZZh+QkpI6wEJAEcjwejItWAAimGgUMguArn9ASwsaYQxaWNAIcz0xFsiTaDjI4AnIAoQsUCDRgkKg6z+QYgEpYAPQ8A3ogtSyAOTqRGwS1LIgET1oqGnBAmxBQ61IvgA0PBGfAkosAAWJIyHvMeEp6AQIGY4r3In1gQOezAQy/AIxEYTPgnhsaR2IDYk1HGd9AAweUNjfRwsSUBkzgdQkhqs+mI9ccUDT+QOq5Big6wuA+D8QvwfiBKqWsyADoQY3EEhFpAcR0EADIAUyVJGY5DdoAECAAQD0FEiMIOct6gAAAABJRU5ErkJggg==') no-repeat center center;
-        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjRTZFNkU2IiBkPSJNMTIgMTYuMjEyQzE3IDEyLjE1NyAyMiAyIDIyIDJIN3MuMTk3IDExLjUwNi0uNzMgMTQuMjNDNC44MTcgMjAuNSAyIDIyLjIwNyAyIDIyLjIwN3M1LTEuOTQzIDEwLTUuOTk2eiIvPjwvc3ZnPg==') no-repeat center center;
-        background-size: contain;
-        -webkit-background-size: contain;
-    }
-
-    ol.conversation li.right ol.messages li.message:last-child::after
-    {
-        content: '';
-        position: absolute;
-        right: -7px;
-        bottom: -5px;
-        z-index: 0;
-        width: 24px;
-        height: 24px;
-        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANpJREFUeNpiYBgFBAAjjFF6zD4BSM0n05wJ3VYHC7FJMMEYQAULgNQDMi34iEuCCY1fSO0gQrEA6IsNQOoAzSyAgkQyzOEn2gKgL0Dx0EiiBQak+ABkSQOQukCrIKIkqIi3AOiLC2QEFUk+gAXVAZpZAAWBRGRAAbItAPriA9SSD1RLRTjiwxGfJcCyTIBsC4i0xIEiC5AsMcSRR/zxFtekAmCQgFJYPZqwIrQkIM8HWJIwum/6qeYDNN8kQH2jACrygZZPoKoFWCyaiGwJ1QHQIgcQpkulDxBgAPUfQIxxGI1GAAAAAElFTkSuQmCC') no-repeat center center;
-        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjNzVDNjNGIiBkPSJNMjIgMjEuOTM4cy0yLjgxNi0xLjMyLTQuMjctNS41OTRDMTYuODAyIDEzLjYyIDE3IDIuNSAxNyAyLjVIMnM1IDkuNzcgMTAgMTMuODI2YzUgNC4wNTQgMTAgNS42MTIgMTAgNS42MTJ6Ii8+PC9zdmc+') no-repeat center center;
-        background-size: contain;
-        -webkit-background-size: contain;
-    }
-
-    ol.conversation li.right ol.messages li.imessage:last-child::after
-    {
-        content: '';
-        position: absolute;
-        right: -7px;
-        bottom: -5px;
-        z-index: 0;
-        width: 24px;
-        height: 24px;
-        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAOpJREFUeNpiYBjqgBHG0Fz9yAFIOZBpzoXroXIbsEmwILEfAHE9mRY0AjFWC5hgDKALQBYsoHYQMWFxCe0sgPqikZY+AIEJ0PggBcgTbQHQFx+AVCGJFiiQ4gMGaJLbQKsggoFEIP5AMwugQZVISx/AgmoBzSyAAlCEX6BqJGMJKkcC8aFAiQ+IsgRYWAqQbQHUkgtQS3BlQgeKLECyxBBHHonHWx+QCoBBUgAt3pGDRhFanpHnAzTfTID65gCS8Hyq+QDNNwlAqh/qm0Ko5dSzACkVgYItH2rJAqpagMWiA0BLDtC8VQEQYACCL0OUmrTe0AAAAABJRU5ErkJggg==') no-repeat center center;
-        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMjlBQkUyIiBkPSJNMjIgMjIuMjA4cy0yLjgxNi0xLjcwNi00LjI3LTUuOThDMTYuODAyIDEzLjUwNyAxNyAyIDE3IDJIMnM1IDEwLjE1NyAxMCAxNC4yMTJjNSA0LjA1MyAxMCA1Ljk5NiAxMCA1Ljk5NnoiLz48L3N2Zz4=') no-repeat center center;
-        background-size: contain;
-        -webkit-background-size: contain;
-    }
-
-    /* message type > media */
-    /* pictures */
-    ol.conversation li ol.messages li.image,
-    ol.conversation li.left ol.messages li.image,
-    ol.conversation li.right ol.messages li.image
-    {
-        padding: 0;
-        background: none;
-        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
-    }
-
-    ol.conversation li ol.messages li.image::before,
-    ol.conversation li ol.messages li.image::after
-    {
-        display: none;
-        visibility: hidden;
-    }
-
-    ol.conversation li ol.messages li.image a.shared
-    {
-        display: block;
-        outline: none;
-        position: relative;
-        margin: 0;
-        padding: 0;
-        width: 250px;
-        border-radius: 25px;
-        border: none;
-    }
-
-    ol.conversation li ol.messages li.image a.shared span.zoom
-    {
-        display: block;
-        position: absolute;
-        visibility: hidden;
-        z-index: 555;
-        opacity: 0;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAfRJREFUeNrkVjtuwkAQNQYplbs0+ABcgAtslYocIBcwVSrKFIE+pEhnDkAOAH3o0sQXcEUFVSpfILPSrPQyMcusHYtIGelp5c/OzM6b2ZkourD0fknPiJDA85Fw6NoBQ5jwWifWiYKw8jnTa3jaOa9a2RKWhKqtA7eEx5r3pVAuKXERmfG/jRyQxq3BVz5dXYjHhIxX3DOVTmj5/gCsCWnA3jfYu8Ho9BUK7M854QrCbU/xqXRgT3gn3LAOq++asLMfY4WCO/DYhbAKjKB1egHPExfBWMm9k+cTxhPmeuypjh2XpZNM44BVNoQs3nj+yxkzj76VSNKzDhhxgrZSQATtwdJBII9SMl6xIlJ4X1eiJZTmMMSBg8cBlCG8L871hDjAgaSLbhgSgVFNHkzh2wxCvPTQhgepBgG8G5HFkSgrvG6LE/pSUaZlrMhajMC4ZcQnTapqDvd43sJ4KnqC0SbhqqbDhYrl/Qn4L10ENM2owpsL1iLAeC64v3fNrB9wg2ECuXv/yPD1kRdxUS24O6oGklRcJHORSBhONxU5Rw30ETS+0U5EbgKSm7IGeVCxnh+Z31eMX4ZPtwc6tsztucH0yGPbw6kxrKeY/UrPEJKIGQApKwIS9ZtxOft10gP+nHFzKeMx8FUqOO9UEq7zJPpP8iXAAIFkgT+Cipw1AAAAAElFTkSuQmCC') no-repeat center center rgba(255,255,255,0.3);
-        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48cGF0aCBkPSJNMS4wNTcgMjguMjI0bDEuODg1IDEuODg1TDguNzkgMjQuMjZsLTEuODM3LTEuOTM1LTUuODk2IDUuODk3em0xNy43NzYtMjYuODlDMTIuMyAxLjMzMyA3IDYuNjMgNyAxMy4xNjZjMCAyLjU2LjgyMyA0LjkyIDIuMjAzIDYuODU3bDIuMjI3IDIuMzQ3YTExLjc1IDExLjc1IDAgMCAwIDcuNDA0IDIuNjMyYzYuNTM1IDAgMTEuODMzLTUuMyAxMS44MzMtMTEuODMzcy01LjMtMTEuODM3LTExLjgzNC0xMS44Mzd6bTAgMjFjLTUuMDU1IDAtOS4xNjctNC4xMTMtOS4xNjctOS4xNjhTMTMuNzggNCAxOC44MzMgNCAyOCA4LjExMiAyOCAxMy4xNjdzLTQuMTEyIDkuMTY2LTkuMTY3IDkuMTY2em0xLjE5Ni0xM0gxNy4zNlYxMmgtMi42Njd2Mi42NjdoMi42Njd2Mi42NjdoMi42Njd2LTIuNjY3aDIuNjY2VjEySDIwLjAzVjkuMzMzeiIgb3BhY2l0eT0iLjgiLz48L3N2Zz4=') no-repeat center center rgba(255,255,255,0.3);
-
-        border-radius: 20px;
-        -webkit-border-radius: 20px;
-        transition: 0.3s;
-    }
-
-    ol.conversation li ol.messages li.image a.shared:hover span.zoom,
-    ol.conversation li ol.messages li.image a.shared:focus span.zoom,
-    ol.conversation li ol.messages li.image a.shared:active span.zoom
-    {
-        visibility: visible;
-        opacity: 1;
-        border-radius: 20px;
-        -webkit-border-radius: 20px;
-        transition: 0.3s;
-    }
-
-    ol.conversation li ol.messages li.image a.shared img
-    {
-        display: block;
-        position: relative;
-        z-index: 1;
-        outline: none;
-        border: none;
-        width: 100%;
-        height: auto;
-        margin: 0;
-        padding: 0;
-        border-radius: 20px;
-        -webkit-border-radius: 20px;
-        transition: 0.3s;
-    }
-
-    /* video */
-    ol.conversation li ol.messages li.video,
-    ol.conversation li.left ol.messages li.video,
-    ol.conversation li.right ol.messages li.video
-    {
-        position: relative;
-        width: 250px;
-        height: 150px;
-        background: rgba(0,0,0,0.8);
-        border-radius: 20px;
-        -webkit-border-radius: 20px;
-    }
-
-    ol.conversation li ol.messages li.message.video::before,
-    ol.conversation li ol.messages li.message.video::after
-    {
-        display: none;
-        visibility: hidden;
-    }
-
-    ol.conversation li ol.messages li.message.video::before,
-    ol.conversation li ol.messages li.message.video:last-child::before
-    {
-        position: absolute;
-        display: block;
-        visibility: visible;
-        content: '';
-        padding: 0;
-        margin: 0;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0.5;
-        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iNCA0IDI0IDI0Ij48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMjYgOS45M3YxMi4xNDNjMCAuMzEzLS4xNDUuNTMyLS40MzUuNjZhLjc4My43ODMgMCAwIDEtLjI4LjA1NWMtLjIgMC0uMzY3LS4wNy0uNTAyLS4yMTJsLTQuNDk4LTQuNDk4djEuODUzYzAgLjg4Ni0uMzE0IDEuNjQ0LS45NDMgMi4yNzItLjYzLjYzLTEuMzg2Ljk0My0yLjI3Ljk0M0g5LjIxNGEzLjA5NCAzLjA5NCAwIDAgMS0yLjI3LS45NDNBMy4wOTUgMy4wOTUgMCAwIDEgNiAxOS45MzJ2LTcuODU4YzAtLjg4NS4zMTUtMS42NDMuOTQ0LTIuMjdzMS4zODYtLjk0NiAyLjI3LS45NDZoNy44NThjLjg4NSAwIDEuNjQzLjMxNCAyLjI3Ljk0My42My42My45NDQgMS4zODcuOTQ0IDIuMjcydjEuODRsNC40OTgtNC40ODZjLjEzNC0uMTQuMy0uMjEyLjUwMy0uMjEyLjA5IDAgLjE4Mi4wMi4yOC4wNTYuMjg4LjEyOC40MzMuMzQ3LjQzMy42NnoiLz48L3N2Zz4=') no-repeat center center;
-        transition: 0.3s;
-    }
-
-    ol.conversation li ol.messages li.video:hover::before
-    {
-        opacity: 0.8;
-        transition: 0.3s;
-    }
-
-    ol.conversation li ol.messages li.video a.shared
-    {
-        z-index: 999;
-        position: absolute;
-        text-decoration: none;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-        padding: 0;
-        margin: 0;
-        transition: 0.3s;
-    }
-
-    ol.conversation li ol.messages li.video a.shared p
-    {
-        position: absolute;
-        padding: 10px;
-        width: 92%;
-        left: 0;
-        bottom: 0;
-        color: rgb(255,255,255);
-        font-size: 9pt;
-        text-align: center;
-        visibility: hidden;
-        opacity: 0;
-        transition: 0.3s;
-    }
-
-    ol.conversation li ol.messages li.video a.shared:hover p
-    {
-        visibility: visible;
-        opacity: 0.8;
-        transition: 0.3s;
-    }
-
-    /* audio / contacts / others */
-    ol.conversation li ol.messages li.audio p,
-    ol.conversation li ol.messages li.contacts p,
-    ol.conversation li ol.messages li.file p
-    {
-        padding: 10px 10px 10px 30px;
-    }
-
-    ol.conversation li ol.messages li.audio p::before,
-    ol.conversation li ol.messages li.contacts p::before,
-    ol.conversation li ol.messages li.file p::before
-    {
-        position: absolute;
-        display: block;
-        content: '';
-        padding: 0;
-        margin: 0 5px 0 3px;
-        left: 5px;
-        top: 0;
-        width: 18px;
-        height: 100%;
-        opacity: 0.5;
-    }
-
-    ol.conversation li ol.messages li.audio p::before
-    {
-        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48cGF0aCBkPSJNMTAgNmwyMi02djIzYzAgMi43Ni0zLjEzNCA1LTcgNXMtNy0yLjI0LTctNSAzLjEzNC01IDctNWMxLjA3NCAwIDIuMDkuMTczIDMgLjQ4VjguMThMMTQgMTJ2MTVjMCAyLjc2LTMuMTM0IDUtNyA1cy03LTIuMjQtNy01YzAtMi43NjIgMy4xMzQtNSA3LTUgMS4wNzQgMCAyLjA5LjE3MiAzIC40OFY2eiIvPjwvc3ZnPg==') no-repeat center center;
-        background-size: contain;
-        -webkit-background-size: contain;
-    }
-
-    ol.conversation li ol.messages li.contacts p::before
-    {
-       background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48cGF0aCBkPSJNMjguOCAzLjJIMy4yQTMuMjEgMy4yMSAwIDAgMCAwIDYuNHYxOS4yYzAgMS43NiAxLjQ0IDMuMiAzLjIgMy4yaDI1LjZjMS43NjIgMCAzLjItMS40NCAzLjItMy4yVjYuNGMwLTEuNzYtMS40MzgtMy4yLTMuMi0zLjJ6bTAgMjIuNEgzLjJWNi40aDI1LjZ2MTkuMnptLTE0LjQtNi4yNGgtOHYyLjg4aDh2LTIuODh6bTAtNC44aC04djIuODhoOHYtMi44OHptMC00LjhoLTh2Mi44OGg4VjkuNzZ6TTI1LjQ0IDIwcy0yLjcyLS43MS0yLjcyLTIuMTFjMC0xLjMzIDEuNzYyLTEuODkgMS43NjItNC42MSAwLTIuMjA4LS42NzItMy41Mi0yLjg4Mi0zLjUycy0yLjg4IDEuMzEtMi44OCAzLjUyYzAgMi43MiAxLjc2IDMuMjggMS43NiA0LjYxIDAgMS40LTIuNzE4IDIuMTEtMi43MTggMi4xMS0uMTYyIDAtLjE2MiAyLjI0LS4xNjIgMi4yNGg4czAtMi4yNC0uMTYtMi4yNHoiLz48L3N2Zz4=') no-repeat center center;
-        background-size: contain;
-        -webkit-background-size: contain;
-    }
-
-    ol.conversation li ol.messages li.file p::before
-    {
-        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48cGF0aCBkPSJNMjkuODk0IDE4LjIzN0wyNC44NTcgNi4yNWMtLjM5Ny0uOC0xLjQ1My0xLjQ1NC0yLjM0Ny0xLjQ1NGgtMy4yNzhsLjYwOCA2LjUwNGg0LjMyTDE2IDE4LjA2OCA3Ljg0IDExLjNoNC4zMmwuNjA4LTYuNTAySDkuNDljLS44OTIgMC0xLjk0OC42NTQtMi4zNDYgMS40NTRMMi4xMDcgMTguMjRjLS40LjgtLjYwNSAyLjE3NS0uNDYgMy4wNThsMS4wOSA1Ljg5OGMuMTQ2Ljg4Mi45OTYgMS42MDMgMS44OSAxLjYwM2gyMi43NWMuODkzIDAgMS43NDMtLjcyMyAxLjg5LTEuNjA0bDEuMDg4LTUuODk4Yy4xNDQtLjg4My0uMDYtMi4yNi0uNDYtMy4wNnptLTIuMTgyIDQuMmwtLjQxMyAyLjQwNGMtLjEyNi45MjQtLjk1OCAxLjY4LTEuODQ3IDEuNjhINi41NDdjLS44OSAwLTEuNzIzLS43NTYtMS44NDYtMS42OGwtLjQxMy0yLjQwMmMtLjEyMy0uOTIzLjUwNi0xLjY3OCAxLjM5Ny0xLjY3OGgyMC42MzRjLjg5My4wMDIgMS41Mi43NTUgMS4zOTUgMS42Nzh6Ii8+PC9zdmc+') no-repeat center center;
-        background-size: contain;
-        -webkit-background-size: contain;
-    }
-
-    /* footer pagination nav */
-    #footer
-    {
-        display: block;
-        position: relative;
-        width: 100%;
-        padding: 4% 0 0 0;
-    }
-
-    #footer .pagination
-    {
-        padding: 2% 0;
-        border-top: 1px solid rgba(0, 0, 0, 0.08);
-    }
-
-    #footer .pagination p.page_nav
-    {
-        margin: 0;
-        padding: 0;
-        text-align: center;
-    }
-
-    /* page info & buttons */
-    #footer .pagination p.page_nav a,
-    #footer .pagination p.page_nav span
-    {
-        display: inline-block;
-        margin: 0 5px;
-        padding: 5px 10px;
-    }
-
-    /* current page info */
-    #footer .pagination p.page_nav span.label
-    {
-        font-weight: bold;
-        font-size: 11pt;
-        color: rgba(0, 0, 0, 0.5);
-    }
-
-    /* page nav buttons */
-    #footer .pagination p.page_nav a.btn_prev,
-    #footer .pagination p.page_nav a.btn_next
-    {
-        background: transparent;
-        border: 1px solid rgb(52, 152, 219);
-        border-radius: 3px;
-        outline: none;
-        text-decoration: none;
-        color: rgb(52, 152, 219);
-    }
-
-    #footer .pagination p.page_nav a.btn_prev:hover,
-    #footer .pagination p.page_nav a.btn_prev:focus,
-    #footer .pagination p.page_nav a.btn_next:hover,
-    #footer .pagination p.page_nav a.btn_next:focus
-    {
-        background-color: rgb(52, 152, 219);
-        border: 1px solid transparent;
-        outline: none;
-        color: rgb(255, 255, 255);
-    }
-
-    #footer .pagination p.page_nav a.btn_prev
-    {
-        float: left;
-    }
-
-    #footer .pagination p.page_nav a.btn_next
-    {
-        float: right;
-    }
-
-    /* print styles */
-    @media print {
-        #wrapper
-        {
-            padding-top: 0;
-        }
-
-        .title
-        {
-            position: relative;
-            top: auto;
-            left: auto;
-            border-bottom: none;
-        }
-
-        a.nav-button
-        {
-            display: none;
-        }
-
-        ol.conversation li ol.messages {
-            /*page-break-after: always;
-            page-break-inside: avoid;
-            -webkit-region-break-inside: avoid;*/
-        }
-
-        ol.conversation li ol.messages p {
-            /*page-break-after: always;
-            page-break-inside: avoid;
-            -webkit-region-break-inside: avoid;
-            position: relative;
-        }
-
-        li {
-            /*page-break-after: always;
-            page-break-inside: avoid;
-            -webkit-region-break-inside: avoid;*/
-            position: relative;
-        }
-
-        ol.conversation li ol.messages li.message .hours
-        {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        a.nav-button,
-        ol.conversation li ol.messages li.user-picture
-        {
-            box-shadow: none;
-        }
-
-        ol.conversation li ol.messages li.user-picture
-        {
-            border: 1px solid rgb(174, 174, 174);
-        }
-    }
+/* Modern WhatsApp Chat Beautifier Styles */
+
+:root {
+  --background: #fafafa;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --chat-outgoing: #0d9488;
+  --chat-outgoing-foreground: #ffffff;
+  --chat-incoming: #f8f8f8;
+  --chat-incoming-foreground: #1a1a1a;
+  --primary: #0d9488;
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  background: var(--background);
+  color: var(--foreground);
+  padding: 0;
+  margin: 0;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#wrapper {
+  max-width: 42rem; /* 672px - matches max-w-2xl */
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+}
+
+/* Header */
+header.title {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+header.title .content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+
+header.title .content .header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+header.title .avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
+header.title h1 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+  text-shadow: none;
+}
+
+header.title .subtitle {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+header.title .nav-button {
+  display: none; /* Hide old nav buttons, use scroll buttons instead */
+}
+
+/* Conversation Container */
+ol.conversation {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  overflow-y: auto;
+  background: var(--background);
+  background-image: url("background.jpg");
+  background-repeat: repeat-y;
+  background-size: 100%;
+  list-style: none;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Date Separator */
+ol.conversation li.date-time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+  list-style: none;
+}
+
+ol.conversation li.date-time p {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  background: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  margin: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+ol.conversation li.date-time p::before {
+  content: "📅";
+  font-size: 0.875rem;
+}
+
+/* Message Groups */
+ol.conversation li.left,
+ol.conversation li.right {
+  display: flex;
+  width: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ol.conversation li.left {
+  justify-content: flex-start;
+}
+
+ol.conversation li.right {
+  justify-content: flex-end;
+}
+
+ol.conversation li ol.messages {
+  max-width: 75%;
+  overflow: hidden;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Message Bubble */
+ol.conversation li.right ol.messages {
+  border-radius: var(--radius);
+  background: var(--chat-outgoing);
+  color: var(--chat-outgoing-foreground);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+ol.conversation li.left ol.messages {
+  border-radius: var(--radius);
+  background: var(--chat-incoming);
+  color: var(--chat-incoming-foreground);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* User Picture - Hidden in modern design */
+ol.conversation li ol.messages li.user-picture {
+  display: none;
+}
+
+/* User Name */
+ol.conversation li ol.messages li.user-name {
+  padding: 0.5rem 0.75rem 0 0.75rem;
+  margin: 0;
+  list-style: none;
+}
+
+ol.conversation li.left ol.messages li.user-name p {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin: 0;
+  padding: 0;
+}
+
+ol.conversation li.right ol.messages li.user-name p {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  padding: 0;
+}
+
+ol.conversation li.right ol.messages li.user-name p:empty {
+  display: none;
+}
+
+/* Messages */
+ol.conversation li ol.messages li.message {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+ol.conversation li ol.messages li.message p {
+  padding: 0.5rem 0.75rem;
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+ol.conversation li.right ol.messages li.message p {
+  color: var(--chat-outgoing-foreground);
+}
+
+ol.conversation li.left ol.messages li.message p {
+  color: var(--chat-incoming-foreground);
+}
+
+/* Message Time */
+ol.conversation li ol.messages li.message .hours {
+  display: block;
+  font-size: 0.625rem;
+  margin-top: 0.25rem;
+  text-align: right;
+  padding: 0 0.75rem 0.5rem 0.75rem;
+}
+
+ol.conversation li.right ol.messages li.message .hours {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+ol.conversation li.left ol.messages li.message .hours {
+  color: var(--muted-foreground);
+}
+
+/* Image Messages */
+ol.conversation li ol.messages li.message.image {
+  padding: 0;
+  margin: 0;
+  background: none;
+}
+
+ol.conversation li ol.messages li.message.image a.shared {
+  display: block;
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+
+ol.conversation li ol.messages li.message.image a.shared img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+ol.conversation li.right ol.messages li.message.image a.shared img {
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+}
+
+ol.conversation li.left ol.messages li.message.image a.shared img {
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+}
+
+ol.conversation li ol.messages li.message.image .hours {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  color: white;
+}
+
+ol.conversation li ol.messages li.message.image a.shared span.zoom {
+  display: none;
+}
+
+/* Video Messages */
+ol.conversation li ol.messages li.message.video {
+  position: relative;
+  width: 256px;
+  height: 192px;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+ol.conversation li.right ol.messages li.message.video {
+  border-bottom-right-radius: var(--radius);
+}
+
+ol.conversation li.left ol.messages li.message.video {
+  border-bottom-left-radius: var(--radius);
+}
+
+ol.conversation li ol.messages li.message.video a.shared {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+ol.conversation li ol.messages li.message.video a.shared::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iNCA0IDI0IDI0Ij48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMjYgOS45M3YxMi4xNDNjMCAuMzEzLS4xNDUuNTMyLS40MzUuNjZhLjc4My43ODMgMCAwIDEtLjI4LjA1NWMtLjIgMC0uMzY3LS4wNy0uNTAyLS4yMTJsLTQuNDk4LTQuNDk4djEuODUzYzAgLjg4Ni0uMzE0IDEuNjQ0LS45NDMgMi4yNzItLjYzLjYzLTEuMzg2Ljk0My0yLjI3Ljk0M0g5LjIxNGEzLjA5NCAzLjA5NCAwIDAgMS0yLjI3LS45NDNBMy4wOTUgMy4wOTUgMCAwIDEgNiAxOS45MzJ2LTcuODU4YzAtLjg4NS4zMTUtMS42NDMuOTQ0LTIuMjdzMS4zODYtLjk0NiAyLjI3LS45NDZoNy44NThjLjg4NSAwIDEuNjQzLjMxNCAyLjI3Ljk0My42My42My45NDQgMS4zODcuOTQ0IDIuMjcydjEuODRsNC40OTgtNC40ODZjLjEzNC0uMTQuMy0uMjEyLjUwMy0uMjEyLjA5IDAgLjE4Mi4wMi4yOC4wNTYuMjg4LjEyOC40MzMuMzQ3LjQzMy42NnoiLz48L3N2Zz4=') no-repeat center center;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+  z-index: 1;
+}
+
+ol.conversation li ol.messages li.message.video a.shared::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3.5rem;
+  height: 3.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 50%;
+  transition: transform 0.3s;
+  z-index: 2;
+}
+
+ol.conversation li ol.messages li.message.video a.shared:hover::before {
+  opacity: 0.8;
+}
+
+ol.conversation li ol.messages li.message.video a.shared:hover::after {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+ol.conversation li ol.messages li.message.video a.shared p {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  color: white;
+  font-size: 0.625rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+ol.conversation li ol.messages li.message.video a.shared:hover p {
+  opacity: 0.8;
+}
+
+ol.conversation li ol.messages li.message.video .hours {
+  display: none;
+}
+
+/* File Messages */
+ol.conversation li ol.messages li.message.file p {
+  padding-left: 2rem;
+  position: relative;
+}
+
+ol.conversation li ol.messages li.message.file p::before {
+  content: "📎";
+  position: absolute;
+  left: 0.75rem;
+  top: 0.5rem;
+  font-size: 1rem;
+  opacity: 0.5;
+}
+
+/* Clear fix */
+ol.conversation li.clear {
+  display: none;
+}
+
+/* Footer */
+#footer {
+  border-top: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  padding: 0.75rem 1rem;
+  text-align: center;
+}
+
+#footer p {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  padding: 0;
+}
+
+/* Scroll Buttons */
+.scroll-buttons {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 20;
+}
+
+.scroll-button {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--card);
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 1.25rem;
+  color: var(--foreground);
+}
+
+.scroll-button:hover {
+  background: var(--muted);
+}
+
+.scroll-button.hidden {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #wrapper {
+    max-width: 100%;
+  }
+
+  ol.conversation li ol.messages {
+    max-width: 85%;
+  }
+}
+
+/* Print Styles */
+@media print {
+  header.title {
+    position: relative;
+  }
+
+  .scroll-buttons {
+    display: none;
+  }
+
+  ol.conversation li ol.messages li.message .hours {
+    opacity: 1;
+    visibility: visible;
+  }
+}

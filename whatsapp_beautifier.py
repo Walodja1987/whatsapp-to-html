@@ -119,7 +119,7 @@ def determine_own_sender(messages):
     return None
 
 def generate_html(messages, folder_name, output_path):
-    """Generate HTML matching CopyTrans structure"""
+    """Generate HTML matching modern WhatsApp-style structure"""
     
     # Determine own sender
     own_sender = determine_own_sender(messages)
@@ -140,6 +140,26 @@ def generate_html(messages, folder_name, output_path):
             if len(parts) > 1:
                 chat_title = ' '.join(parts[1:]) if len(parts) > 1 else first_sender
     
+    # Get year range for subtitle
+    years = set()
+    for msg in messages:
+        date_str = msg['date']
+        for fmt in ['%d.%m.%y', '%d/%m/%y', '%d.%m.%Y', '%d/%m/%Y']:
+            try:
+                dt = datetime.strptime(date_str, fmt)
+                years.add(dt.year)
+                break
+            except ValueError:
+                continue
+    year_range = '/'.join(sorted(str(y) for y in years)) if years else ''
+    
+    # Count valid messages for footer
+    valid_message_count = sum(1 for msg in messages 
+                             if not any(x in msg['sender'] for x in ['😎', 'WhatsApp', 'erstellt', 'hinzugefügt', 'geändert', 'verschlüsselt']))
+    
+    # Get first letter of chat title for avatar
+    avatar_letter = chat_title[0].upper() if chat_title else 'A'
+    
     # Generate conversation HTML
     conversation_html = []
     last_date = None
@@ -158,7 +178,6 @@ def generate_html(messages, folder_name, output_path):
             if current_group_open:
                 conversation_html.append(f'            </ol>')
                 conversation_html.append(f'        </li>')
-                conversation_html.append(f'        <li class="clear"></li>')
                 current_group_open = False
             
             # Reset last_sender so next message always starts a new group
@@ -174,37 +193,25 @@ def generate_html(messages, folder_name, output_path):
         is_own = msg['sender'] == own_sender
         msg_class = 'right' if is_own else 'left'
         
-        # Start new message group if sender changed or if no group is open
-        if not current_group_open or msg['sender'] != last_sender or is_own != last_is_own:
-            # Close previous group if exists
-            if current_group_open:
-                conversation_html.append(f'            </ol>')
-                conversation_html.append(f'        </li>')
-                conversation_html.append(f'        <li class="clear"></li>')
-            
-            # Start new message group
-            conversation_html.append(f'        <li class="{msg_class}">')
-            conversation_html.append(f'            <ol class="messages">')
-            current_group_open = True
-            
-            # User picture (placeholder)
-            conversation_html.append(f'                <li class="user-picture">')
-            conversation_html.append(f'                    <img src="no-user.jpg" alt="{escape(msg["sender"])}">')
-            conversation_html.append(f'                </li>')
-            
-            # User name (only for others)
-            if not is_own:
-                conversation_html.append(f'                <li class="user-name">')
-                conversation_html.append(f'                    <p>{escape(msg["sender"])}</p>')
-                conversation_html.append(f'                </li>')
-            else:
-                conversation_html.append(f'                <li class="user-name">')
-                conversation_html.append(f'                    <p></p>')
-                conversation_html.append(f'                </li>')
-        
         # Message content
         has_text = msg['text'] and msg['text'].strip()
         has_media = msg['media_file'] is not None
+        
+        # Always start a new message group for each message to avoid grouping
+        # Close previous group if exists
+        if current_group_open:
+            conversation_html.append(f'            </ol>')
+            conversation_html.append(f'        </li>')
+        
+        # Start new message group for this message
+        conversation_html.append(f'        <li class="{msg_class}">')
+        conversation_html.append(f'            <ol class="messages">')
+        current_group_open = True
+        
+        # User name (show for both incoming and outgoing)
+        conversation_html.append(f'                <li class="user-name">')
+        conversation_html.append(f'                    <p>{escape(msg["sender"])}</p>')
+        conversation_html.append(f'                </li>')
         
         if has_media:
             media_path = f'{folder_name}/{msg["media_file"]}'
@@ -243,59 +250,95 @@ def generate_html(messages, folder_name, output_path):
     if current_group_open:
         conversation_html.append(f'            </ol>')
         conversation_html.append(f'        </li>')
-        conversation_html.append(f'        <li class="clear"></li>')
     
     conversation_html_str = '\n'.join(conversation_html)
     
-    # Load CSS template from copyTrans
+    # Load CSS template
     css_template_path = Path(__file__).parent / 'style.css'
     if css_template_path.exists():
         css_template = css_template_path.read_text(encoding='utf-8')
-        # Add border-radius to videos if not present
-        if 'ol.conversation li ol.messages li.video' in css_template and 'border-radius' not in css_template.split('ol.conversation li ol.messages li.video')[1].split('}')[0]:
-            # Insert border-radius after background in video CSS
-            css_template = css_template.replace(
-                '    ol.conversation li ol.messages li.video,\n    ol.conversation li.left ol.messages li.video,\n    ol.conversation li.right ol.messages li.video\n    {\n        position: relative;\n        width: 250px;\n        height: 150px;\n        background: rgba(0,0,0,0.8);\n    }',
-                '    ol.conversation li ol.messages li.video,\n    ol.conversation li.left ol.messages li.video,\n    ol.conversation li.right ol.messages li.video\n    {\n        position: relative;\n        width: 250px;\n        height: 150px;\n        background: rgba(0,0,0,0.8);\n        border-radius: 20px;\n        -webkit-border-radius: 20px;\n    }'
-            )
     else:
-        # Fallback: use inline CSS (simplified version)
-        print("⚠️  Warning: style.css not found, using inline CSS")
+        print("⚠️  Warning: style.css not found")
         css_template = None
     
     if not css_template:
-        raise FileNotFoundError("style.css not found! Please extract it from copy_trans_version.html first.")
+        raise FileNotFoundError("style.css not found!")
     
     html = f'''<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Unterhaltung mit {escape(chat_title)}</title>
 <style type="text/css">
 {css_template}
 </style>
+<script>
+// Scroll buttons functionality
+(function() {{
+    const container = document.querySelector('ol.conversation');
+    const scrollButtons = document.getElementById('scroll-buttons');
+    const btnUp = document.getElementById('scroll-up');
+    const btnDown = document.getElementById('scroll-down');
+    
+    if (!container || !scrollButtons) return;
+    
+    function updateScrollButtons() {{
+        const scrollTop = container.scrollTop;
+        const scrollHeight = container.scrollHeight;
+        const clientHeight = container.clientHeight;
+        
+        if (btnUp) {{
+            btnUp.classList.toggle('hidden', scrollTop <= 100);
+        }}
+        if (btnDown) {{
+            btnDown.classList.toggle('hidden', scrollTop >= scrollHeight - clientHeight - 100);
+        }}
+    }}
+    
+    container.addEventListener('scroll', updateScrollButtons);
+    updateScrollButtons();
+    
+    if (btnUp) {{
+        btnUp.addEventListener('click', function() {{
+            container.scrollTo({{ top: 0, behavior: 'smooth' }});
+        }});
+    }}
+    
+    if (btnDown) {{
+        btnDown.addEventListener('click', function() {{
+            container.scrollTo({{ top: container.scrollHeight, behavior: 'smooth' }});
+        }});
+    }}
+}})();
+</script>
 </head>
 <body>
-<a id="top">&nbsp;</a>
 <div id="wrapper">
-
     <header class="title">
         <div class="content">
-            <h1>Unterhaltung mit {escape(chat_title)}</h1>
-            <a class="nav-button" href="#bottom">
-                <span>↓</span>
-            </a>
-            <a class="nav-button" href="#top">
-                <span>↑</span>
-            </a>
+            <div class="header-left">
+                <div class="avatar">{avatar_letter}</div>
+                <div>
+                    <h1>Unterhaltung mit {escape(chat_title)}</h1>
+                    {f'<p class="subtitle">{year_range}</p>' if year_range else ''}
+                </div>
+            </div>
         </div>
     </header>
+    
     <ol class="conversation">
-
 {conversation_html_str}
-
     </ol>
-    <a id="bottom">&nbsp;</a>
+    
+    <div id="scroll-buttons" class="scroll-buttons">
+        <button id="scroll-up" class="scroll-button hidden" aria-label="Scroll to top">↑</button>
+        <button id="scroll-down" class="scroll-button" aria-label="Scroll to bottom">↓</button>
+    </div>
+    
+    <footer id="footer">
+        <p>{valid_message_count} messages • Exported from WhatsApp</p>
+    </footer>
 </div>
 </body>
 </html>'''
@@ -304,7 +347,7 @@ def generate_html(messages, folder_name, output_path):
 
 def main():
     print("=" * 60)
-    print("   WhatsApp Chat Beautifier - CopyTrans Style")
+    print("   WhatsApp Chat Beautifier - Modern Style")
     print("=" * 60)
     print()
     
