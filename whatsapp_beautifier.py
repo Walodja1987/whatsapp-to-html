@@ -157,15 +157,16 @@ def generate_html(messages, folder_name, output_path):
                 own_sender = msg['sender']
                 break
     
-    # Extract chat title from folder name or first message
+    # Extract chat title from first message with group emoji
     chat_title = folder_name.replace('_', ' ').replace('whatsapp chat ', '').title()
     if messages:
-        first_sender = messages[0]['sender']
-        if '😎' in first_sender:
-            # Extract emoji and name
-            parts = first_sender.split(' ')
-            if len(parts) > 1:
-                chat_title = ' '.join(parts[1:]) if len(parts) > 1 else first_sender
+        # Look for the group chat name in the first messages
+        for msg in messages[:5]:  # Check first 5 messages
+            sender = msg['sender']
+            if '😎' in sender:
+                # Use the full sender name as chat title (includes emoji and name)
+                chat_title = sender
+                break
     
     # Get year range for subtitle
     years = set()
@@ -184,8 +185,6 @@ def generate_html(messages, folder_name, output_path):
     valid_message_count = sum(1 for msg in messages 
                              if not any(x in msg['sender'] for x in ['😎', 'WhatsApp', 'erstellt', 'hinzugefügt', 'geändert', 'verschlüsselt']))
     
-    # Get first letter of chat title for avatar
-    avatar_letter = chat_title[0].upper() if chat_title else 'A'
     
     # Generate conversation HTML
     conversation_html = []
@@ -303,7 +302,7 @@ def generate_html(messages, folder_name, output_path):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unterhaltung mit {escape(chat_title)}</title>
+<title>{escape(chat_title)}</title>
 <style type="text/css">
 {css_template}
 </style>
@@ -352,9 +351,8 @@ def generate_html(messages, folder_name, output_path):
     <header class="title">
         <div class="content">
             <div class="header-left">
-                <div class="avatar">{avatar_letter}</div>
                 <div>
-                    <h1>Unterhaltung mit {escape(chat_title)}</h1>
+                    <h1>{escape(chat_title)}</h1>
                     {f'<p class="subtitle">{year_range}</p>' if year_range else ''}
                 </div>
             </div>
