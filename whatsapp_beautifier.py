@@ -405,11 +405,11 @@ def main():
     print()
     
     # Check for background.jpg
-    light_jpg = folder_path / 'background.jpg'
-    if not light_jpg.exists():
+    background_jpg = folder_path / 'background.jpg'
+    if not background_jpg.exists():
         # Check parent directory
-        light_jpg = folder_path.parent / 'background.jpg'
-        if not light_jpg.exists():
+        background_jpg = folder_path.parent / 'background.jpg'
+        if not background_jpg.exists():
             print("⚠️  Warnung: background.jpg nicht gefunden. HTML wird erstellt, aber Hintergrund fehlt.")
     
     print("🔄 Verarbeite Chat...")
