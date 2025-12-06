@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-WhatsApp Chat Beautifier
+WhatsApp-To-HTML
 Converts WhatsApp _chat.txt to HTML
 """
 
@@ -581,7 +581,7 @@ def generate_html(messages, folder_name, output_path):
 
 def main():
     print("=" * 60)
-    print("   WhatsApp Chat Beautifier")
+    print("   WhatsApp-To-HTML")
     print("=" * 60)
     print()
     
