@@ -2,8 +2,7 @@
 
 A Python tool that converts exported WhatsApp chat files into beautifully formatted HTML files locally. Perfect for archiving, viewing, or sharing your WhatsApp conversations with a beautiful interface.
 
-<img width="606" height="863" alt="image" src="https://github.com/user-attachments/assets/a40e7116-774e-4603-86fd-c28cc35fdd7c" />
-
+<img width="1037" height="876" alt="image" src="https://github.com/user-attachments/assets/080e8b49-998d-4d90-82fb-1a5af338135f" />
 
 ## Requirements
 
