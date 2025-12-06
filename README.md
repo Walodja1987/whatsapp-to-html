@@ -80,6 +80,17 @@ Replace `my_whatsapp_data` with the name of your WhatsApp data folder.
 - Double-click the HTML file to open it in your web browser
 - **Important:** The HTML output file must be in the same directory as your WhatsApp data folder for images and media to load correctly. This is especially important if you want to move the files to another folder or an external drive like a USB stick.
 
+## Language Support
+
+The tool automatically detects the language of your WhatsApp export and adapts accordingly:
+
+- **Supported languages**: German, English, Spanish, French, Italian
+- **Date formats**: Supports both European (DD.MM.YY) and US (MM/DD/YY) date formats
+- **Auto-detection**: The language is automatically detected from your chat content
+- **Month names**: Displayed in the detected language (e.g., "January" in English, "Januar" in German)
+
+**Note**: The current version has been tested using German WhatsApp exports only. While the tool is designed to support multiple languages, other languages may need additional testing and refinement.
+
 ## Customization
 
 ### Background Image

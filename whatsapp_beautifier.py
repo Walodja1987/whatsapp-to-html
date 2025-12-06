@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-WhatsApp Chat Beautifier - CopyTrans Style
-Converts WhatsApp _chat.txt to HTML matching CopyTrans format
+WhatsApp Chat Beautifier
+Converts WhatsApp _chat.txt to HTML
 """
 
 import re
@@ -10,13 +10,144 @@ from pathlib import Path
 from datetime import datetime
 from html import escape
 
+# Language detection and system message filtering will use detected language
+
+# Month names in multiple languages
+MONTH_NAMES = {
+    'en': ['January', 'February', 'March', 'April', 'May', 'June',
+           'July', 'August', 'September', 'October', 'November', 'December'],
+    'de': ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
+           'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+    'es': ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+           'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    'fr': ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+           'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    'it': ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+           'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre']
+}
+
+def is_system_message(sender, content, lang='en'):
+    """Detect if a message is a system message using detected language"""
+    if '😎' in sender or 'WhatsApp' in sender:
+        return True
+    
+    text_to_check = (sender + ' ' + content).lower()
+    
+    # Check keywords for the detected language first (most common case)
+    lang_keywords = {
+        'de': ['erstellt', 'hinzugefügt', 'geändert', 'verschlüsselt', 'gelöscht', 'weggelassen'],
+        'en': ['created', 'added', 'changed', 'encrypted', 'deleted', 'omitted'],
+        'es': ['creado', 'añadido', 'cambiado', 'cifrado', 'eliminado', 'omitido'],
+        'fr': ['créé', 'ajouté', 'modifié', 'chiffré', 'supprimé', 'omis'],
+        'it': ['creato', 'aggiunto', 'modificato', 'crittografato', 'eliminato', 'omesso']
+    }
+    
+    # Check detected language keywords first
+    if lang in lang_keywords:
+        for keyword in lang_keywords[lang]:
+            if keyword.lower() in text_to_check:
+                return True
+    
+    # Fallback: check common system message patterns (covers edge cases)
+    system_patterns = {
+        'de': [r'du hast.*(erstellt|hinzugefügt|geändert|gelöscht)',
+               r'diese nachricht (wurde gelöscht|wurde als admin gelöscht)'],
+        'en': [r'you (created|added|changed|deleted)',
+               r'has (created|added|changed|deleted)',
+               r'this message (was deleted|has been deleted)'],
+        'es': [r'has (creado|añadido|cambiado|eliminado)',
+               r'este mensaje (fue eliminado|ha sido eliminado)'],
+        'fr': [r'vous avez (créé|ajouté|modifié|supprimé)',
+               r'ce message (a été supprimé|a été supprimé par un admin)'],
+        'it': [r'hai (creato|aggiunto|modificato|eliminato)',
+               r'questo messaggio (è stato eliminato|è stato eliminato da un amministratore)']
+    }
+    
+    if lang in system_patterns:
+        for pattern in system_patterns[lang]:
+            if re.search(pattern, text_to_check, re.IGNORECASE):
+                return True
+    
+    return False
+
+def detect_language_from_content(messages):
+    """Detect language from message content"""
+    # Sample first 50 messages to detect language
+    sample_text = ' '.join([msg.get('text', '') + ' ' + msg.get('sender', '') 
+                            for msg in messages[:50]])
+    sample_text = sample_text.lower()
+    
+    # Check for language indicators
+    if any(word in sample_text for word in ['erstellt', 'hinzugefügt', 'geändert', 'gelöscht', 'du hast']):
+        return 'de'  # German
+    elif any(word in sample_text for word in ['created', 'added', 'changed', 'deleted', 'you have']):
+        return 'en'  # English
+    elif any(word in sample_text for word in ['creado', 'añadido', 'cambiado', 'eliminado']):
+        return 'es'  # Spanish
+    elif any(word in sample_text for word in ['créé', 'ajouté', 'modifié', 'supprimé']):
+        return 'fr'  # French
+    elif any(word in sample_text for word in ['creato', 'aggiunto', 'modificato', 'eliminato']):
+        return 'it'  # Italian
+    
+    return 'en'  # Default to English
+
+def parse_date(date_str):
+    """Parse date string supporting both European (DD.MM.YY) and US (MM/DD/YY) formats"""
+    # Try European formats first (DD.MM.YY or DD/MM/YY)
+    european_formats = ['%d.%m.%y', '%d/%m/%y', '%d.%m.%Y', '%d/%m/%Y']
+    # Then US formats (MM/DD/YY or MM.DD.YY)
+    us_formats = ['%m/%d/%y', '%m.%d.%y', '%m/%d/%Y', '%m.%d.%Y']
+    
+    # Try all formats
+    for fmt in european_formats + us_formats:
+        try:
+            return datetime.strptime(date_str, fmt)
+        except ValueError:
+            continue
+    
+    # If all fail, try to auto-detect by checking if first number > 12
+    parts = re.split(r'[\.\/]', date_str)
+    if len(parts) >= 2:
+        try:
+            first = int(parts[0])
+            second = int(parts[1])
+            # If first > 12, it's likely DD.MM format (European)
+            # If second > 12, it's likely MM.DD format (US)
+            if first > 12 and second <= 12:
+                # European format: DD.MM.YY
+                for fmt in ['%d.%m.%y', '%d/%m/%y', '%d.%m.%Y', '%d/%m/%Y']:
+                    try:
+                        return datetime.strptime(date_str, fmt)
+                    except ValueError:
+                        continue
+            elif second > 12 and first <= 12:
+                # US format: MM/DD/YY
+                for fmt in ['%m/%d/%y', '%m.%d.%y', '%m/%d/%Y', '%m.%d.%Y']:
+                    try:
+                        return datetime.strptime(date_str, fmt)
+                    except ValueError:
+                        continue
+        except ValueError:
+            pass
+    
+    return None
+
+def format_date(date_str, lang='en'):
+    """Convert date string to 'DD Month YYYY' format with language support"""
+    dt = parse_date(date_str)
+    if dt is None:
+        return date_str
+    
+    months = MONTH_NAMES.get(lang, MONTH_NAMES['en'])
+    return f"{dt.day} {months[dt.month - 1]} {dt.year}"
+
 def parse_chat_file(chat_path):
     """Parse WhatsApp _chat.txt file"""
     messages = []
     current = None
     
     # Pattern for: [DD.MM.YY, HH:MM:SS] Sender: Message
-    # Also handles: ‎[DD.MM.YY, HH:MM:SS] Sender: ‎<Anhang: filename>
+    # Also handles: ‎[DD.MM.YY, HH:MM:SS] Sender: ‎<WORD: filename> (language-agnostic)
     # Note: The ‎ character (U+200E) is a left-to-right mark
     # We'll strip it first, then match
     pattern = r'^[‎\s\[]?(\d{1,2}[\.\/]\d{1,2}[\.\/]\d{2,4}),?\s+(\d{1,2}:\d{2}(?::\d{2})?)[\]\s]*[-:]?\s*([^:]+):\s*(.*)$'
@@ -44,13 +175,15 @@ def parse_chat_file(chat_path):
                 sender = match.group(3).strip()
                 content = match.group(4).strip()
                 
-                # Check for media attachment - look for <Anhang: filename>
-                media_match = re.search(r'<Anhang:\s*([^>]+)>', content)
+                # Check for media attachment - look for <WORD: filename> (language-agnostic)
+                # Matches: <Anhang: ...>, <Attachment: ...>, <Anexo: ...>, etc.
+                media_match = re.search(r'<([^:]+):\s*([^>]+)>', content)
                 media_file = None
                 media_type = None
                 
                 if media_match:
-                    media_file = media_match.group(1).strip()
+                    # Group 2 contains the filename
+                    media_file = media_match.group(2).strip()
                     # Determine media type
                     if media_file.lower().endswith(('.jpg', '.jpeg', '.png', '.gif', '.webp')):
                         media_type = 'image'
@@ -58,8 +191,8 @@ def parse_chat_file(chat_path):
                         media_type = 'video'
                     else:
                         media_type = 'file'
-                    # Remove media tag and any leading/trailing whitespace/characters
-                    content = re.sub(r'[‎\s]*<Anhang:\s*[^>]+>[‎\s]*', '', content).strip()
+                    # Remove media tag and any leading/trailing whitespace/characters (language-agnostic)
+                    content = re.sub(r'[‎\s]*<[^:]+:\s*[^>]+>[‎\s]*', '', content).strip()
                 
                 current = {
                     'date': date_str,
@@ -116,29 +249,14 @@ def parse_chat_file(chat_path):
     
     return combined_messages
 
-def format_date(date_str):
-    """Convert DD.MM.YY to 'DD Month YYYY' format"""
-    try:
-        # Try different date formats
-        for fmt in ['%d.%m.%y', '%d/%m/%y', '%d.%m.%Y', '%d/%m/%Y']:
-            try:
-                dt = datetime.strptime(date_str, fmt)
-                # Format as "10 December 2022"
-                months = ['January', 'February', 'March', 'April', 'May', 'June',
-                         'July', 'August', 'September', 'October', 'November', 'December']
-                return f"{dt.day} {months[dt.month - 1]} {dt.year}"
-            except ValueError:
-                continue
-        return date_str
-    except:
-        return date_str
 
-def determine_own_sender(messages):
+def determine_own_sender(messages, lang='en'):
     """Determine which sender is 'own' (typically first non-phone-number sender)"""
     for msg in messages:
         sender = msg['sender']
-        # Skip system messages
-        if '😎' in sender or 'WhatsApp' in sender or 'erstellt' in sender or 'hinzugefügt' in sender or 'geändert' in sender:
+        content = msg.get('text', '')
+        # Skip system messages using detected language
+        if is_system_message(sender, content, lang):
             continue
         # If sender doesn't start with + or isn't all digits, it's likely "own"
         if not sender.startswith('+') and not sender.replace(' ', '').isdigit():
@@ -148,12 +266,15 @@ def determine_own_sender(messages):
 def generate_html(messages, folder_name, output_path):
     """Generate HTML matching modern WhatsApp-style structure"""
     
-    # Determine own sender
-    own_sender = determine_own_sender(messages)
+    # Detect language from content (including system messages - they help detect language!)
+    lang = detect_language_from_content(messages)
+    
+    # Determine own sender using detected language
+    own_sender = determine_own_sender(messages, lang)
     if not own_sender:
         # Fallback: use first non-system sender
         for msg in messages:
-            if not any(x in msg['sender'] for x in ['😎', 'WhatsApp', 'erstellt', 'hinzugefügt', 'geändert']):
+            if not is_system_message(msg['sender'], msg.get('text', ''), lang):
                 own_sender = msg['sender']
                 break
     
@@ -172,18 +293,14 @@ def generate_html(messages, folder_name, output_path):
     years = set()
     for msg in messages:
         date_str = msg['date']
-        for fmt in ['%d.%m.%y', '%d/%m/%y', '%d.%m.%Y', '%d/%m/%Y']:
-            try:
-                dt = datetime.strptime(date_str, fmt)
-                years.add(dt.year)
-                break
-            except ValueError:
-                continue
+        dt = parse_date(date_str)
+        if dt:
+            years.add(dt.year)
     year_range = '/'.join(sorted(str(y) for y in years)) if years else ''
     
     # Count valid messages for footer
     valid_message_count = sum(1 for msg in messages 
-                             if not any(x in msg['sender'] for x in ['😎', 'WhatsApp', 'erstellt', 'hinzugefügt', 'geändert', 'verschlüsselt']))
+                             if not is_system_message(msg['sender'], msg.get('text', ''), lang))
     
     
     # Generate conversation HTML
@@ -194,12 +311,12 @@ def generate_html(messages, folder_name, output_path):
     current_group_open = False
     
     for msg in messages:
-        # Skip system messages
-        if any(x in msg['sender'] for x in ['😎', 'WhatsApp', 'erstellt', 'hinzugefügt', 'geändert', 'verschlüsselt']):
+        # Skip system messages using detected language
+        if is_system_message(msg['sender'], msg.get('text', ''), lang):
             continue
         
         # Date separator - close any open group first
-        date_formatted = format_date(msg['date'])
+        date_formatted = format_date(msg['date'], lang)
         if date_formatted != last_date:
             if current_group_open:
                 conversation_html.append(f'            </ol>')
@@ -344,6 +461,91 @@ def generate_html(messages, folder_name, output_path):
         }});
     }}
 }})();
+
+// Lightbox functionality for images and videos
+(function() {{
+    // Create lightbox element
+    const lightbox = document.createElement('div');
+    lightbox.className = 'lightbox';
+    lightbox.innerHTML = `
+        <button class="lightbox-close" aria-label="Close">×</button>
+        <div class="lightbox-content"></div>
+    `;
+    document.body.appendChild(lightbox);
+    
+    const lightboxContent = lightbox.querySelector('.lightbox-content');
+    const closeButton = lightbox.querySelector('.lightbox-close');
+    
+    function openLightbox(mediaUrl, isVideo) {{
+        lightboxContent.innerHTML = '';
+        
+        if (isVideo) {{
+            const video = document.createElement('video');
+            video.src = mediaUrl;
+            video.controls = true;
+            video.autoplay = true;
+            lightboxContent.appendChild(video);
+        }} else {{
+            const img = document.createElement('img');
+            img.src = mediaUrl;
+            lightboxContent.appendChild(img);
+        }}
+        
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }}
+    
+    function closeLightbox() {{
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        // Stop video playback
+        const video = lightboxContent.querySelector('video');
+        if (video) {{
+            video.pause();
+            video.src = '';
+        }}
+    }}
+    
+    // Handle clicks on media links
+    document.addEventListener('click', function(e) {{
+        const link = e.target.closest('a.shared');
+        if (!link) return;
+        
+        e.preventDefault();
+        const mediaUrl = link.getAttribute('href');
+        
+        // Determine if it's a video or image
+        const isVideo = /\.(mp4|mov|avi|mkv)$/i.test(mediaUrl);
+        const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(mediaUrl);
+        
+        if (isVideo || isImage) {{
+            openLightbox(mediaUrl, isVideo);
+        }} else {{
+            // For other file types, open in new tab
+            window.open(mediaUrl, '_blank');
+        }}
+    }});
+    
+    // Close on close button click
+    closeButton.addEventListener('click', function(e) {{
+        e.stopPropagation();
+        closeLightbox();
+    }});
+    
+    // Close on lightbox background click
+    lightbox.addEventListener('click', function(e) {{
+        if (e.target === lightbox) {{
+            closeLightbox();
+        }}
+    }});
+    
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {{
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) {{
+            closeLightbox();
+        }}
+    }});
+}})();
 </script>
 </head>
 <body>
@@ -379,7 +581,7 @@ def generate_html(messages, folder_name, output_path):
 
 def main():
     print("=" * 60)
-    print("   WhatsApp Chat Beautifier - Modern Style")
+    print("   WhatsApp Chat Beautifier")
     print("=" * 60)
     print()
     
@@ -387,21 +589,21 @@ def main():
     if len(sys.argv) > 1:
         folder_path = Path(sys.argv[1])
     else:
-        folder_input = input("📁 Pfad zum WhatsApp Chat-Ordner: ").strip()
+        folder_input = input("📁 Path to WhatsApp chat folder: ").strip()
         folder_path = Path(folder_input)
     
     if not folder_path.exists() or not folder_path.is_dir():
-        print(f"❌ Ordner nicht gefunden: {folder_path}")
+        print(f"❌ Folder not found: {folder_path}")
         return
     
     # Find _chat.txt
     chat_file = folder_path / '_chat.txt'
     if not chat_file.exists():
-        print(f"❌ _chat.txt nicht gefunden in: {folder_path}")
+        print(f"❌ _chat.txt not found in: {folder_path}")
         return
     
-    print(f"✅ Ordner gefunden: {folder_path.name}")
-    print(f"✅ Chat-Datei gefunden: {chat_file.name}")
+    print(f"✅ Folder found: {folder_path.name}")
+    print(f"✅ Chat file found: {chat_file.name}")
     print()
     
     # Check for background.jpg
@@ -410,21 +612,21 @@ def main():
         # Check parent directory
         background_jpg = folder_path.parent / 'background.jpg'
         if not background_jpg.exists():
-            print("⚠️  Warnung: background.jpg nicht gefunden. HTML wird erstellt, aber Hintergrund fehlt.")
+            print("⚠️  Warning: background.jpg not found. HTML will be created, but background is missing.")
     
-    print("🔄 Verarbeite Chat...")
+    print("🔄 Processing chat...")
     
     try:
         # Parse messages
         messages = parse_chat_file(chat_file)
-        print(f"✅ {len(messages)} Nachrichten geparst")
+        print(f"✅ {len(messages)} messages parsed")
         
         if len(messages) == 0:
-            print("❌ Keine Nachrichten gefunden!")
+            print("❌ No messages found!")
             return
         
         # Generate HTML
-        print("📝 Erstelle HTML...")
+        print("📝 Creating HTML...")
         folder_name = folder_path.name
         html = generate_html(messages, folder_name, folder_path)
         
@@ -434,17 +636,14 @@ def main():
         
         print()
         print("=" * 60)
-        print(f"✅ FERTIG!")
-        print(f"📄 Gespeichert: {output_path}")
-        print(f"💾 Größe: {output_path.stat().st_size / 1024:.1f} KB")
+        print(f"✅ DONE!")
+        print(f"📄 Saved: {output_path}")
+        print(f"💾 Size: {output_path.stat().st_size / 1024:.1f} KB")
         print()
-        print("ℹ️  Wichtig: Die HTML-Datei muss im gleichen Verzeichnis")
-        print(f"   wie der Ordner '{folder_name}' sein, damit die Bilder")
-        print("   korrekt geladen werden können.")
         print("=" * 60)
         
     except Exception as e:
-        print(f"❌ Fehler: {e}")
+        print(f"❌ Error: {e}")
         import traceback
         traceback.print_exc()
 
