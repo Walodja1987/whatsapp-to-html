@@ -1,4 +1,4 @@
-# WhatsApp Chat Beautifier
+# WhatsApp-To-HTML
 
 A Python tool that converts exported WhatsApp chat files into beautifully formatted HTML files locally. Perfect for archiving, viewing, or sharing your WhatsApp conversations with a beautiful interface.
 
@@ -13,11 +13,12 @@ A Python tool that converts exported WhatsApp chat files into beautifully format
 
 Clone this repository to your local machine. The directory structure should look like this:
 ```
-whatsapp-beautifier/
+whatsapp-to-html/
 ├── convert_whatsapp_to_html.py
 ├── style.css
 ├── background.jpg
 ├── README.md
+├── CONTRIBUTING.md
 ├── .gitignore
 ```
 
@@ -52,11 +53,12 @@ whatsapp-beautifier/
 
 Your directory structure should now look like this:
 ```
-whatsapp-beautifier/
+whatsapp-to-html/
 ├── convert_whatsapp_to_html.py
 ├── style.css
 ├── background.jpg
 ├── README.md
+├── CONTRIBUTING.md
 ├── .gitignore
 ├── my_whatsapp_data/ (added)
 │   ├── _chat.txt
@@ -104,11 +106,12 @@ The tool automatically detects the language of your WhatsApp export and adapts a
 After running the script, your directory structure should look like this:
 
 ```
-whatsapp-beautifier/
+whatsapp-to-html/
 ├── convert_whatsapp_to_html.py
 ├── style.css
 ├── background.jpg
 ├── README.md
+├── CONTRIBUTING.md
 ├── .gitignore
 ├── my_whatsapp_data/
 │   ├── _chat.txt
