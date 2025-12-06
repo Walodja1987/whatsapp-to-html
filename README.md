@@ -4,39 +4,49 @@ A Python tool that converts exported WhatsApp chat files into beautifully format
 
 ## Requirements
 
-- Python 3.6 or higher
-- A WhatsApp chat export (with or without media)
+- A WhatsApp chat export (see instructions below)
+- Python 3.6 or higher (no additional Python packages are required as it uses only standard library)
 
 ## Installation
 
-1. Clone or download this repository. The directory structure should look like this:
+Clone this repository to your local machine. The directory structure should look like this:
 ```
 whatsapp-beautifier/
 ├── whatsapp_beautifier.py
 ├── style.css
 ├── background.jpg
-├── no-user.jpg
 ├── README.md
+├── .gitignore
 ```
-3. Ensure you have Python 3 installed on your system
-4. No additional Python packages are required (uses only standard library)
+
 
 ## Usage
 
 ### Step 1: Export WhatsApp Chat
 
-1. Open WhatsApp on your phone
-2. Select the chat you want to export
-3. Tap on the chat name at the top
-4. **Scroll** to the bottom where you will find **"Export chat"**
-5. Click on it and select whether you want to download it with or without media
-6. Save the zip file. I recommend using Google Drive or Dropbox, then transfer it to your local machine
+**On iOS:**
+* **Open WhatsApp** on your phone
+* **Select the chat** you want to export
+* Tap on the chat **name at the top**
+* **Scroll to the bottom** where you will find **"Export chat"**
+* Click on it and select whether you want to download it with or without media
+* Slide the second line to the right, click on "More" (three dots icon), and choose where to save the zip file. It is recommended to choose Google Drive or Dropbox and then download it to your local machine afterwards, or email it to yourself.
+
+**On Android:**
+* **Open WhatsApp** on your phone
+* **Select the chat** you want to export
+* Tap the **three dots menu** (⋮) in the top right corner
+* Select **"More"** from the menu
+* Tap **"Export chat"**
+* Choose whether you want to export **with media** or **without media**
+* Select where to save the zip file (recommended: Google Drive, Dropbox, or email it to yourself)
+* Download the zip file to your local machine
 
 ### Step 2: Prepare Your Data
 
-1. Extract the zip file
-2. Copy the extracted folder to the directory where this code lives
-3. Name the folder as you want (e.g., `my_whatsapp_data`)
+* Extract the zip file on your local machine
+* Place the extracted folder within the cloned repository (where the `whatsapp_beautifier.py` file resides).
+* Name the extracted folder to whatever you like (e.g., `my_whatsapp_data`). Avoid using special characters like ä, ö, ü, etc., to prevent issues during processing.
 
 Your directory structure should now look like this:
 ```
@@ -45,6 +55,7 @@ whatsapp-beautifier/
 ├── style.css
 ├── background.jpg
 ├── README.md
+├── .gitignore
 ├── my_whatsapp_data/ (added)
 │   ├── _chat.txt
 │   ├── [photos and videos]
@@ -53,7 +64,7 @@ whatsapp-beautifier/
 
 ### Step 3: Run the Script
 
-Run the Python script with your folder name as an argument:
+Run the Python script with your folder name as an argument (ensure you have Python 3 installed on your system):
 
 ```bash
 python3 whatsapp_beautifier.py my_whatsapp_data
@@ -75,11 +86,6 @@ Replace `my_whatsapp_data` with the name of your WhatsApp data folder.
 - The file must be named `background.jpg`
 - Place it in the same directory as the script
 
-### User Profile Picture
-
-- You can replace the existing `no-user.jpg` (or `no_user.jpg`) file with your own profile picture
-- It will be used as the default profile picture for all users in the chat
-
 ## File Structure
 
 After running the script, your directory structure should look like this:
@@ -90,22 +96,10 @@ whatsapp-beautifier/
 ├── style.css
 ├── background.jpg
 ├── README.md
+├── .gitignore
 ├── my_whatsapp_data/
 │   ├── _chat.txt
 │   ├── [photos and videos]
 │   └── ...
 └── my_whatsapp_data_chat.html (generated)
 ```
-
-## Troubleshooting
-
-- **Images not loading?** Make sure the HTML file and the WhatsApp data folder are in the same directory
-- **Script can't find `_chat.txt`?** Ensure you've extracted the WhatsApp export zip and the folder contains the `_chat.txt` file
-- **Missing background?** The script will work without `background.jpg`, but you may want to add one for a better visual experience
-
-## Notes
-
-- The script automatically detects which messages are yours vs. other participants
-- System messages (like "group created", "member added", etc.) are automatically filtered out
-- Media files (images, videos) are displayed inline when available
-- The output HTML is self-contained but references media files from the data folder
