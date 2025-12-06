@@ -345,20 +345,8 @@ ol.conversation li ol.messages li.message.video a.shared {
   text-decoration: none;
 }
 
+/* Blurred circle background */
 ol.conversation li ol.messages li.message.video a.shared::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iNCA0IDI0IDI0Ij48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMjYgOS45M3YxMi4xNDNjMCAuMzEzLS4xNDUuNTMyLS40MzUuNjZhLjc4My43ODMgMCAwIDEtLjI4LjA1NWMtLjIgMC0uMzY3LS4wNy0uNTAyLS4yMTJsLTQuNDk4LTQuNDk4djEuODUzYzAgLjg4Ni0uMzE0IDEuNjQ0LS45NDMgMi4yNzItLjYzLjYzLTEuMzg2Ljk0My0yLjI3Ljk0M0g5LjIxNGEzLjA5NCAzLjA5NCAwIDAgMS0yLjI3LS45NDNBMy4wOTUgMy4wOTUgMCAwIDEgNiAxOS45MzJ2LTcuODU4YzAtLjg4NS4zMTUtMS42NDMuOTQ0LTIuMjdzMS4zODYtLjk0NiAyLjI3LS45NDZoNy44NThjLjg4NSAwIDEuNjQzLjMxNCAyLjI3Ljk0My42My42My45NDQgMS4zODcuOTQ0IDIuMjcydjEuODRsNC40OTgtNC40ODZjLjEzNC0uMTQuMy0uMjEyLjUwMy0uMjEyLjA5IDAgLjE4Mi4wMi4yOC4wNTYuMjg4LjEyOC40MzMuMzQ3LjQzMy42NnoiLz48L3N2Zz4=') no-repeat center center;
-  opacity: 0.5;
-  transition: opacity 0.3s;
-  z-index: 1;
-}
-
-ol.conversation li ol.messages li.message.video a.shared::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -371,15 +359,31 @@ ol.conversation li ol.messages li.message.video a.shared::after {
   -webkit-backdrop-filter: blur(8px);
   border-radius: 50%;
   transition: transform 0.3s;
+  z-index: 1;
+}
+
+/* Play icon on top */
+ol.conversation li ol.messages li.message.video a.shared::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3.5rem;
+  height: 3.5rem;
+  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iNCA0IDI0IDI0Ij48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMjYgOS45M3YxMi4xNDNjMCAuMzEzLS4xNDUuNTMyLS40MzUuNjZhLjc4My43ODMgMCAwIDEtLjI4LjA1NWMtLjIgMC0uMzY3LS4wNy0uNTAyLS4yMTJsLTQuNDk4LTQuNDk4djEuODUzYzAgLjg4Ni0uMzE0IDEuNjQ0LS45NDMgMi4yNzItLjYzLjYzLTEuMzg2Ljk0My0yLjI3Ljk0M0g5LjIxNGEzLjA5NCAzLjA5NCAwIDAgMS0yLjI3LS45NDNBMy4wOTUgMy4wOTUgMCAwIDEgNiAxOS45MzJ2LTcuODU4YzAtLjg4NS4zMTUtMS42NDMuOTQ0LTIuMjdzMS4zODYtLjk0NiAyLjI3LS45NDZoNy44NThjLjg4NSAwIDEuNjQzLjMxNCAyLjI3Ljk0My42My42My45NDQgMS4zODcuOTQ0IDIuMjcydjEuODRsNC40OTgtNC40ODZjLjEzNC0uMTQuMy0uMjEyLjUwMy0uMjEyLjA5IDAgLjE4Mi4wMi4yOC4wNTYuMjg4LjEyOC40MzMuMzQ3LjQzMy42NnoiLz48L3N2Zz4=') no-repeat center center;
+  background-size: 24px 24px;
+  opacity: 0.9;
+  transition: opacity 0.3s;
   z-index: 2;
 }
 
 ol.conversation li ol.messages li.message.video a.shared:hover::before {
-  opacity: 0.8;
+  transform: translate(-50%, -50%) scale(1.1);
 }
 
 ol.conversation li ol.messages li.message.video a.shared:hover::after {
-  transform: translate(-50%, -50%) scale(1.1);
+  opacity: 1;
 }
 
 ol.conversation li ol.messages li.message.video a.shared p {
