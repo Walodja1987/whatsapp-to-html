@@ -87,7 +87,34 @@ def parse_chat_file(chat_path):
     if current:
         messages.append(current)
     
-    return messages
+    # Combine media + text messages that have the same timestamp and sender
+    # This handles cases where WhatsApp exports media and text as separate lines
+    combined_messages = []
+    i = 0
+    while i < len(messages):
+        msg = messages[i]
+        
+        # Check if this is a media-only message (no text)
+        if msg['media_file'] and (not msg['text'] or not msg['text'].strip()):
+            # Check if next message is text-only from same sender with same timestamp
+            if i + 1 < len(messages):
+                next_msg = messages[i + 1]
+                if (next_msg['sender'] == msg['sender'] and 
+                    next_msg['date'] == msg['date'] and 
+                    next_msg['time'] == msg['time'] and
+                    not next_msg['media_file'] and 
+                    next_msg['text'] and next_msg['text'].strip()):
+                    # Combine: keep media from first, text from second
+                    combined_msg = msg.copy()
+                    combined_msg['text'] = next_msg['text']
+                    combined_messages.append(combined_msg)
+                    i += 2  # Skip both messages
+                    continue
+        
+        combined_messages.append(msg)
+        i += 1
+    
+    return combined_messages
 
 def format_date(date_str):
     """Convert DD.MM.YY to 'DD Month YYYY' format"""
@@ -196,6 +223,7 @@ def generate_html(messages, folder_name, output_path):
         # Message content
         has_text = msg['text'] and msg['text'].strip()
         has_media = msg['media_file'] is not None
+        has_both = has_media and has_text
         
         # Always start a new message group for each message to avoid grouping
         # Close previous group if exists
@@ -221,19 +249,25 @@ def generate_html(messages, folder_name, output_path):
                 conversation_html.append(f'                        <img class="img-shared" src="{media_path}">')
                 conversation_html.append(f'                        <span class="zoom"></span>')
                 conversation_html.append(f'                    </a>')
-                conversation_html.append(f'                    <span class="hours">{msg["time"]}</span>')
+                # If text follows, don't show time on image, it will be on text
+                if not has_text:
+                    conversation_html.append(f'                    <span class="hours">{msg["time"]}</span>')
                 conversation_html.append(f'                </li>')
             elif msg['media_type'] == 'video':
                 conversation_html.append(f'                <li class="message video">')
                 conversation_html.append(f'                    <a class="shared" href="{media_path}">')
                 conversation_html.append(f'                        <p>{escape(msg["media_file"])}</p>')
                 conversation_html.append(f'                    </a>')
-                conversation_html.append(f'                    <span class="hours">{msg["time"]}</span>')
+                # If text follows, don't show time on video, it will be on text
+                if not has_text:
+                    conversation_html.append(f'                    <span class="hours">{msg["time"]}</span>')
                 conversation_html.append(f'                </li>')
             else:
                 conversation_html.append(f'                <li class="message file">')
                 conversation_html.append(f'                    <p>{escape(msg["media_file"])}</p>')
-                conversation_html.append(f'                    <span class="hours">{msg["time"]}</span>')
+                # If text follows, don't show time on file, it will be on text
+                if not has_text:
+                    conversation_html.append(f'                    <span class="hours">{msg["time"]}</span>')
                 conversation_html.append(f'                </li>')
         
         if has_text:

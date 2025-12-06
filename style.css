@@ -270,18 +270,19 @@ ol.conversation li ol.messages li.message.image a.shared img {
   width: 100%;
   height: auto;
   border-radius: var(--radius);
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
 }
 
-ol.conversation li.right ol.messages li.message.image a.shared img {
-  border-bottom-left-radius: var(--radius);
-  border-bottom-right-radius: var(--radius);
+/* Image with text below - remove bottom border radius from image */
+ol.conversation li ol.messages li.message.image:has(+ li.message) a.shared img {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
-ol.conversation li.left ol.messages li.message.image a.shared img {
-  border-bottom-left-radius: var(--radius);
-  border-bottom-right-radius: var(--radius);
+/* Text message following image - remove top border radius */
+ol.conversation li ol.messages li.message.image + li.message {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-top: 0;
 }
 
 ol.conversation li ol.messages li.message.image .hours {
@@ -317,6 +318,19 @@ ol.conversation li.right ol.messages li.message.video {
 
 ol.conversation li.left ol.messages li.message.video {
   border-bottom-left-radius: var(--radius);
+}
+
+/* Video with text below - remove bottom border radius from video */
+ol.conversation li ol.messages li.message.video:has(+ li.message) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Text message following video - remove top border radius */
+ol.conversation li ol.messages li.message.video + li.message {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-top: 0;
 }
 
 ol.conversation li ol.messages li.message.video a.shared {
