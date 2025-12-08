@@ -289,7 +289,7 @@ def generate_print_html(messages, folder_name, folder_path):
         if date_formatted != last_date:
             last_date = date_formatted
             # Add spacer before date separator
-            conversation_html.append(f'<div style="height: 0.15in;"></div>')
+            conversation_html.append(f'<div style="height: 0.075in;"></div>')
             conversation_html.append(f'<div style="text-align: center; width: 100%;"><div class="date-separator">{escape(date_formatted)}</div></div>')
         
         # Determine if own or other
@@ -299,7 +299,7 @@ def generate_print_html(messages, folder_name, folder_path):
         # has_text and has_media already defined at loop start for filtering
         
         # Add spacer before message bubble
-        conversation_html.append(f'<div style="height: 0.15in;"></div>')
+        conversation_html.append(f'<div style="height: 0.075in;"></div>')
         
         # Start message bubble
         conversation_html.append(f'<div class="message-bubble {msg_class}">')
@@ -352,6 +352,19 @@ def generate_print_html(messages, folder_name, folder_path):
         @page {
             size: Letter;
             margin: 0;
+            @bottom-right {
+                content: counter(page);
+                font-size: 8pt;
+                color: #999999;
+                margin-right: 0.5in;
+                margin-bottom: 0.3in;
+            }
+        }
+        
+        @page :first {
+            @bottom-right {
+                content: none;
+            }
         }
         
         @media print {
@@ -496,7 +509,7 @@ def generate_print_html(messages, folder_name, folder_path):
             font-size: 7pt;
             font-weight: 500;
             color: var(--muted-foreground);
-            margin: 0.2in auto 0.1in auto;
+            margin: 0.1in auto 0.1in auto;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
             break-after: avoid;
             page-break-after: avoid;
@@ -516,8 +529,8 @@ def generate_print_html(messages, folder_name, folder_path):
             page-break-inside: avoid;
             -webkit-column-break-inside: avoid;
             display: block;
-            margin-bottom: 0.15in;
-            margin-top: 0.15in;
+            margin-bottom: 0.075in;
+            margin-top: 0.075in;
             border-radius: var(--radius);
             overflow: hidden;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -587,7 +600,7 @@ def generate_print_html(messages, folder_name, folder_path):
         .message-time {
             font-size: 6pt;
             text-align: right;
-            padding: 0.02in 0.08in 0.05in 0.08in;
+            padding: 0.02in 0.15in 0.05in 0.08in;
             margin: 0;
         }
         
@@ -739,8 +752,6 @@ def generate_print_html(messages, folder_name, folder_path):
     <div class="content-wrapper">
         <div class="cover-page">
             <h1>{escape(chat_title)}</h1>
-            {f'<p class="subtitle">{year_range}</p>' if year_range else ''}
-            {f'<p class="subtitle">{valid_message_count} messages</p>'}
         </div>
         
         <div class="conversation">
