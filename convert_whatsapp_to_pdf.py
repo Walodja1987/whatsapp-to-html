@@ -496,7 +496,7 @@ def generate_print_html(messages, folder_name, folder_path):
             font-size: 7pt;
             font-weight: 500;
             color: var(--muted-foreground);
-            margin: 0 auto 0.1in auto;
+            margin: 0.2in auto 0.1in auto;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
             break-after: avoid;
             page-break-after: avoid;
@@ -514,6 +514,8 @@ def generate_print_html(messages, folder_name, folder_path):
         .message-bubble {
             break-inside: avoid;
             page-break-inside: avoid;
+            -webkit-column-break-inside: avoid;
+            display: block;
             margin-bottom: 0.15in;
             margin-top: 0.15in;
             border-radius: var(--radius);
@@ -603,7 +605,14 @@ def generate_print_html(messages, folder_name, folder_path):
             margin: 0;
             break-inside: avoid;
             page-break-inside: avoid;
+            -webkit-column-break-inside: avoid;
             position: relative;
+            display: block;
+        }
+        
+        /* Ensure message bubbles with images have better bottom margin and break control */
+        .message-bubble:has(.message-image) {
+            margin-bottom: 0.3in;
         }
         
         .message-image img {
@@ -638,6 +647,14 @@ def generate_print_html(messages, folder_name, folder_path):
             overflow: hidden;
             margin: 0;
             padding: 0;
+            break-inside: avoid;
+            page-break-inside: avoid;
+            -webkit-column-break-inside: avoid;
+        }
+        
+        /* Ensure message bubbles with videos have better bottom margin and break control */
+        .message-bubble:has(.message-video) {
+            margin-bottom: 0.3in;
         }
         
         /* Video play button overlay - matching original */
