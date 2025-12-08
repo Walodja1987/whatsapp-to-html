@@ -372,6 +372,18 @@ def generate_print_html(messages, folder_name, folder_path):
             html {
                 margin: 0;
             }
+            
+            /* Ensure proper spacing at top of each page */
+            .conversation {
+                orphans: 2;
+                widows: 2;
+            }
+            
+            /* Add space before elements that start a new page/column */
+            .message-bubble,
+            .date-separator {
+                break-before: avoid-column;
+            }
         }
         
         * {
@@ -463,10 +475,15 @@ def generate_print_html(messages, folder_name, folder_path):
             background-image: url("background.jpg");
             background-repeat: repeat-y;
             background-size: 100%;
-            padding: 0.15in 0.5in 0.5in 0.5in;
+            padding: 0.4in 0.5in 0.5in 0.5in;
             column-count: 2;
             column-gap: 0.35in;
             column-rule: 1px solid var(--border);
+        }
+        
+        /* Ensure spacing at top of each page/column */
+        .conversation > *:first-child {
+            margin-top: 0.2in;
         }
         
         .date-separator {
@@ -483,6 +500,8 @@ def generate_print_html(messages, folder_name, folder_path):
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
             break-after: avoid;
             page-break-after: avoid;
+            break-before: avoid-page;
+            page-break-before: avoid;
             /* Center in column but keep narrow width */
             width: auto;
         }
@@ -496,9 +515,15 @@ def generate_print_html(messages, folder_name, folder_path):
             break-inside: avoid;
             page-break-inside: avoid;
             margin-bottom: 0.15in;
+            margin-top: 0.15in;
             border-radius: var(--radius);
             overflow: hidden;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Ensure first message bubble on page has proper top spacing */
+        .message-bubble:first-of-type {
+            margin-top: 0.25in;
         }
         
         /* Media-only messages should fit content width, not full column width */
