@@ -529,7 +529,8 @@ def generate_print_html(messages, folder_name, folder_path):
         /* Media-only messages should fit content width, not full column width */
         .message-bubble:has(.message-video):not(:has(.message-text)),
         .message-bubble:has(.message-image):not(:has(.message-text)) {
-            display: inline-block;
+            display: block;
+            width: fit-content;
             max-width: 100%;
         }
         
