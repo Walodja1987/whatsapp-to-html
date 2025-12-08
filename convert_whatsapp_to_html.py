@@ -263,6 +263,14 @@ def determine_own_sender(messages, lang='en'):
             return sender
     return None
 
+def format_time(time_str):
+    """Format time to hh:mm (remove seconds)"""
+    # Handle both hh:mm:ss and hh:mm formats
+    parts = time_str.split(':')
+    if len(parts) >= 2:
+        return f"{parts[0]}:{parts[1]}"
+    return time_str
+
 def generate_html(messages, folder_name, output_path):
     """Generate HTML matching modern WhatsApp-style structure"""
     
@@ -367,7 +375,7 @@ def generate_html(messages, folder_name, output_path):
                 conversation_html.append(f'                    </a>')
                 # If text follows, don't show time on image, it will be on text
                 if not has_text:
-                    conversation_html.append(f'                    <span class="hours">{msg["time"]}</span>')
+                    conversation_html.append(f'                    <span class="hours">{format_time(msg["time"])}</span>')
                 conversation_html.append(f'                </li>')
             elif msg['media_type'] == 'video':
                 conversation_html.append(f'                <li class="message video">')
@@ -376,21 +384,21 @@ def generate_html(messages, folder_name, output_path):
                 conversation_html.append(f'                    </a>')
                 # If text follows, don't show time on video, it will be on text
                 if not has_text:
-                    conversation_html.append(f'                    <span class="hours">{msg["time"]}</span>')
+                    conversation_html.append(f'                    <span class="hours">{format_time(msg["time"])}</span>')
                 conversation_html.append(f'                </li>')
             else:
                 conversation_html.append(f'                <li class="message file">')
                 conversation_html.append(f'                    <p>{escape(msg["media_file"])}</p>')
                 # If text follows, don't show time on file, it will be on text
                 if not has_text:
-                    conversation_html.append(f'                    <span class="hours">{msg["time"]}</span>')
+                    conversation_html.append(f'                    <span class="hours">{format_time(msg["time"])}</span>')
                 conversation_html.append(f'                </li>')
         
         if has_text:
             conversation_html.append(f'                <li class="message">')
             text = escape(msg['text']).replace('\n', '<br>')
             conversation_html.append(f'                    <p>{text}</p>')
-            conversation_html.append(f'                    <span class="hours">{msg["time"]}</span>')
+            conversation_html.append(f'                    <span class="hours">{format_time(msg["time"])}</span>')
             conversation_html.append(f'                </li>')
         
         last_sender = msg['sender']

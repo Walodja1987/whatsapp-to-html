@@ -226,6 +226,14 @@ def determine_own_sender(messages, lang='en'):
             return sender
     return None
 
+def format_time(time_str):
+    """Format time to hh:mm (remove seconds)"""
+    # Handle both hh:mm:ss and hh:mm formats
+    parts = time_str.split(':')
+    if len(parts) >= 2:
+        return f"{parts[0]}:{parts[1]}"
+    return time_str
+
 def generate_print_html(messages, folder_name, folder_path):
     """Generate print-optimized HTML"""
     
@@ -274,7 +282,7 @@ def generate_print_html(messages, folder_name, folder_path):
         date_formatted = format_date(msg['date'], lang)
         if date_formatted != last_date:
             last_date = date_formatted
-            conversation_html.append(f'<div class="date-separator">{escape(date_formatted)}</div>')
+            conversation_html.append(f'<div style="text-align: center; width: 100%;"><div class="date-separator">{escape(date_formatted)}</div></div>')
         
         # Determine if own or other
         is_own = msg['sender'] == own_sender
@@ -297,12 +305,18 @@ def generate_print_html(messages, folder_name, folder_path):
                 # Use relative path for images - match original HTML structure
                 conversation_html.append(f'<div class="message-image">')
                 conversation_html.append(f'<img src="{folder_path.name}/{msg["media_file"]}" alt="Image">')
+                # Timestamp overlay on image (only if no text)
+                if not has_text:
+                    conversation_html.append(f'<span class="media-timestamp">{format_time(msg["time"])}</span>')
                 conversation_html.append(f'</div>')
             elif msg['media_type'] == 'video':
                 # Match original HTML video structure with play icon overlay
                 conversation_html.append(f'<div class="message-video">')
                 conversation_html.append(f'<div class="video-play-overlay"></div>')
                 conversation_html.append(f'<p class="video-filename">{escape(msg["media_file"])}</p>')
+                # Timestamp overlay on video (only if no text)
+                if not has_text:
+                    conversation_html.append(f'<span class="media-timestamp">{format_time(msg["time"])}</span>')
                 conversation_html.append(f'</div>')
             else:
                 conversation_html.append(f'<div class="message-file">')
@@ -314,8 +328,10 @@ def generate_print_html(messages, folder_name, folder_path):
             text = escape(msg['text']).replace('\n', '<br>')
             conversation_html.append(f'<div class="message-text">{text}</div>')
         
-        # Timestamp
-        conversation_html.append(f'<div class="message-time">{msg["time"]}</div>')
+        # Timestamp - only show as separate element if there's text
+        # For media-only messages, timestamp is overlaid on the media
+        if has_text or not has_media:
+            conversation_html.append(f'<div class="message-time">{format_time(msg["time"])}</div>')
         
         # End message bubble
         conversation_html.append(f'</div>')
@@ -406,24 +422,31 @@ def generate_print_html(messages, folder_name, folder_path):
             min-height: 100vh;
         }
         
-        .header {
-            text-align: center;
-            padding: 0.5in 0.25in 0.2in 0.25in;
-            border-bottom: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.95);
+        /* Cover Page */
+        .cover-page {
+            background: white;
+            height: 11in;
+            width: 8.5in;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            page-break-after: always;
         }
         
-        .header h1 {
-            margin: 0;
-            font-size: 16pt;
-            color: var(--foreground);
+        .cover-page h1 {
+            font-size: 28pt;
+            color: var(--primary);
+            margin: 0 0 0.2in 0;
             font-weight: 600;
+            text-align: center;
         }
         
-        .header .subtitle {
-            margin: 0.1in 0 0 0;
-            font-size: 9pt;
+        .cover-page .subtitle {
+            font-size: 14pt;
             color: var(--muted-foreground);
+            margin: 0;
+            text-align: center;
         }
         
         .conversation {
@@ -431,7 +454,7 @@ def generate_print_html(messages, folder_name, folder_path):
             background-image: url("background.jpg");
             background-repeat: repeat-y;
             background-size: 100%;
-            padding: 0.5in 0.5in;
+            padding: 0.25in 0.5in 0.5in 0.5in;
             column-count: 2;
             column-gap: 0.35in;
             column-rule: 1px solid var(--border);
@@ -447,13 +470,24 @@ def generate_print_html(messages, folder_name, folder_path):
             font-size: 7pt;
             font-weight: 500;
             color: var(--muted-foreground);
-            margin: 0.1in auto;
-            width: 100%;
-            text-align: center;
-            justify-content: center;
+            margin: 0.15in auto 0.1in auto;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
             break-after: avoid;
             page-break-after: avoid;
+            /* Center in column but keep narrow width */
+            width: auto;
+        }
+        
+        /* Wrapper to center the date separator */
+        .date-separator-wrapper {
+            text-align: center;
+            width: 100%;
+        }
+        
+        /* First element in column should have top margin */
+        .date-separator:first-child,
+        .message-bubble:first-child {
+            margin-top: 0.15in;
         }
         
         .date-separator::before {
@@ -468,6 +502,13 @@ def generate_print_html(messages, folder_name, folder_path):
             border-radius: var(--radius);
             overflow: hidden;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Media-only messages should fit content width, not full column width */
+        .message-bubble:has(.message-video):not(:has(.message-text)),
+        .message-bubble:has(.message-image):not(:has(.message-text)) {
+            display: inline-block;
+            max-width: 100%;
         }
         
         .message-left {
@@ -497,6 +538,11 @@ def generate_print_html(messages, folder_name, folder_path):
             color: rgba(255, 255, 255, 0.9);
         }
         
+        /* Adjust sender name padding for media messages */
+        .message-bubble .sender-name {
+            padding: 0.05in 0.08in 0.02in 0.08in;
+        }
+        
         .message-text {
             font-size: 8pt;
             line-height: 1.4;
@@ -516,7 +562,7 @@ def generate_print_html(messages, folder_name, folder_path):
         .message-time {
             font-size: 6pt;
             text-align: right;
-            padding: 0 0.08in 0.05in 0.08in;
+            padding: 0.02in 0.08in 0.05in 0.08in;
             margin: 0;
         }
         
@@ -534,6 +580,7 @@ def generate_print_html(messages, folder_name, folder_path):
             margin: 0;
             break-inside: avoid;
             page-break-inside: avoid;
+            position: relative;
         }
         
         .message-image img {
@@ -541,15 +588,25 @@ def generate_print_html(messages, folder_name, folder_path):
             width: 100%;
             height: auto;
             border-radius: var(--radius);
-            max-height: 2.5in;
+            max-height: 3.5in;
+            object-fit: contain;
         }
         
-        /* Video Messages - match original HTML structure */
+        /* Timestamp overlay on images - no background */
+        .message-image .media-timestamp {
+            position: absolute;
+            bottom: 0.05in;
+            right: 0.05in;
+            color: white;
+            font-size: 6pt;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        /* Video Messages - match original HTML structure exactly */
         .message-video {
             position: relative;
-            width: 100%;
-            aspect-ratio: 4/3;
-            max-width: 2.5in;
+            width: 256px;
+            height: 192px;
             background: rgba(0, 0, 0, 0.9);
             border-radius: var(--radius);
             display: flex;
@@ -602,6 +659,16 @@ def generate_print_html(messages, folder_name, folder_path):
             margin: 0;
         }
         
+        /* Timestamp overlay on videos - no background */
+        .message-video .media-timestamp {
+            position: absolute;
+            bottom: 0.05in;
+            right: 0.05in;
+            color: white;
+            font-size: 6pt;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
         /* File Messages */
         .message-file {
             padding: 0.05in 0.08in;
@@ -641,9 +708,10 @@ def generate_print_html(messages, folder_name, folder_path):
     </div>
     
     <div class="content-wrapper">
-        <div class="header">
+        <div class="cover-page">
             <h1>{escape(chat_title)}</h1>
-            {f'<p class="subtitle">{year_range} • {valid_message_count} messages</p>' if year_range else f'<p class="subtitle">{valid_message_count} messages</p>'}
+            {f'<p class="subtitle">{year_range}</p>' if year_range else ''}
+            {f'<p class="subtitle">{valid_message_count} messages</p>'}
         </div>
         
         <div class="conversation">
