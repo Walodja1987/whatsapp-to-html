@@ -288,6 +288,8 @@ def generate_print_html(messages, folder_name, folder_path):
         date_formatted = format_date(msg['date'], lang)
         if date_formatted != last_date:
             last_date = date_formatted
+            # Add spacer before date separator
+            conversation_html.append(f'<div style="height: 0.15in;"></div>')
             conversation_html.append(f'<div style="text-align: center; width: 100%;"><div class="date-separator">{escape(date_formatted)}</div></div>')
         
         # Determine if own or other
@@ -295,6 +297,9 @@ def generate_print_html(messages, folder_name, folder_path):
         msg_class = 'message-right' if is_own else 'message-left'
         
         # has_text and has_media already defined at loop start for filtering
+        
+        # Add spacer before message bubble
+        conversation_html.append(f'<div style="height: 0.15in;"></div>')
         
         # Start message bubble
         conversation_html.append(f'<div class="message-bubble {msg_class}">')
@@ -474,7 +479,7 @@ def generate_print_html(messages, folder_name, folder_path):
             font-size: 7pt;
             font-weight: 500;
             color: var(--muted-foreground);
-            margin: 0.15in auto 0.1in auto;
+            margin: 0 auto 0.1in auto;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
             break-after: avoid;
             page-break-after: avoid;
@@ -490,7 +495,6 @@ def generate_print_html(messages, folder_name, folder_path):
         .message-bubble {
             break-inside: avoid;
             page-break-inside: avoid;
-            margin-top: 0.15in;
             margin-bottom: 0.15in;
             border-radius: var(--radius);
             overflow: hidden;
