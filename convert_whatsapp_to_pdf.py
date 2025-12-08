@@ -617,10 +617,11 @@ def generate_print_html(messages, folder_name, folder_path):
         
         .message-image img {
             display: block;
-            width: 100%;
+            width: auto;
+            max-width: 100%;
             height: auto;
+            max-height: 5.25in;
             border-radius: var(--radius);
-            max-height: 3.5in;
             object-fit: contain;
         }
         
