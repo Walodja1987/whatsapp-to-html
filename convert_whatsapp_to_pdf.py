@@ -278,6 +278,12 @@ def generate_print_html(messages, folder_name, folder_path):
         if is_system_message(msg['sender'], msg.get('text', ''), lang):
             continue
         
+        # Skip empty messages (reactions without content)
+        has_text = msg['text'] and msg['text'].strip()
+        has_media = msg['media_file'] is not None
+        if not has_text and not has_media:
+            continue
+        
         # Date separator
         date_formatted = format_date(msg['date'], lang)
         if date_formatted != last_date:
@@ -288,8 +294,7 @@ def generate_print_html(messages, folder_name, folder_path):
         is_own = msg['sender'] == own_sender
         msg_class = 'message-right' if is_own else 'message-left'
         
-        has_text = msg['text'] and msg['text'].strip()
-        has_media = msg['media_file'] is not None
+        # has_text and has_media already defined at loop start for filtering
         
         # Start message bubble
         conversation_html.append(f'<div class="message-bubble {msg_class}">')
@@ -313,7 +318,6 @@ def generate_print_html(messages, folder_name, folder_path):
                 # Match original HTML video structure with play icon overlay
                 conversation_html.append(f'<div class="message-video">')
                 conversation_html.append(f'<div class="video-play-overlay"></div>')
-                conversation_html.append(f'<p class="video-filename">{escape(msg["media_file"])}</p>')
                 # Timestamp overlay on video (only if no text)
                 if not has_text:
                     conversation_html.append(f'<span class="media-timestamp">{format_time(msg["time"])}</span>')
@@ -454,7 +458,7 @@ def generate_print_html(messages, folder_name, folder_path):
             background-image: url("background.jpg");
             background-repeat: repeat-y;
             background-size: 100%;
-            padding: 0.25in 0.5in 0.5in 0.5in;
+            padding: 0.15in 0.5in 0.5in 0.5in;
             column-count: 2;
             column-gap: 0.35in;
             column-rule: 1px solid var(--border);
@@ -478,18 +482,6 @@ def generate_print_html(messages, folder_name, folder_path):
             width: auto;
         }
         
-        /* Wrapper to center the date separator */
-        .date-separator-wrapper {
-            text-align: center;
-            width: 100%;
-        }
-        
-        /* First element in column should have top margin */
-        .date-separator:first-child,
-        .message-bubble:first-child {
-            margin-top: 0.15in;
-        }
-        
         .date-separator::before {
             content: "📅";
             font-size: 8pt;
@@ -498,7 +490,8 @@ def generate_print_html(messages, folder_name, folder_path):
         .message-bubble {
             break-inside: avoid;
             page-break-inside: avoid;
-            margin-bottom: 0.08in;
+            margin-top: 0.15in;
+            margin-bottom: 0.15in;
             border-radius: var(--radius);
             overflow: hidden;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -645,18 +638,6 @@ def generate_print_html(messages, folder_name, folder_path):
             background-size: 24px 24px;
             opacity: 0.9;
             z-index: 2;
-        }
-        
-        .message-video .video-filename {
-            position: absolute;
-            bottom: 0.05in;
-            right: 0.05in;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 0.02in 0.05in;
-            border-radius: 9999px;
-            color: white;
-            font-size: 6pt;
-            margin: 0;
         }
         
         /* Timestamp overlay on videos - no background */

@@ -323,6 +323,12 @@ def generate_html(messages, folder_name, output_path):
         if is_system_message(msg['sender'], msg.get('text', ''), lang):
             continue
         
+        # Skip empty messages (reactions without content)
+        has_text = msg['text'] and msg['text'].strip()
+        has_media = msg['media_file'] is not None
+        if not has_text and not has_media:
+            continue
+        
         # Date separator - close any open group first
         date_formatted = format_date(msg['date'], lang)
         if date_formatted != last_date:
@@ -344,9 +350,7 @@ def generate_html(messages, folder_name, output_path):
         is_own = msg['sender'] == own_sender
         msg_class = 'right' if is_own else 'left'
         
-        # Message content
-        has_text = msg['text'] and msg['text'].strip()
-        has_media = msg['media_file'] is not None
+        # Message content (already defined at loop start for filtering)
         has_both = has_media and has_text
         
         # Always start a new message group for each message to avoid grouping
