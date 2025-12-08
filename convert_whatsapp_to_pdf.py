@@ -351,7 +351,7 @@ def generate_print_html(messages, folder_name, folder_path):
     print_css = '''
         @page {
             size: Letter;
-            margin: 0;
+            margin: 0.4in 0 0.4in 0;
             @bottom-right {
                 content: counter(page);
                 font-size: 8pt;
@@ -362,6 +362,7 @@ def generate_print_html(messages, folder_name, folder_path):
         }
         
         @page :first {
+            margin: 0;
             @bottom-right {
                 content: none;
             }
@@ -488,7 +489,7 @@ def generate_print_html(messages, folder_name, folder_path):
             background-image: url("background.jpg");
             background-repeat: repeat-y;
             background-size: 100%;
-            padding: 0.4in 0.5in 0.5in 0.5in;
+            padding: 0 0.5in;
             column-count: 2;
             column-gap: 0.35in;
             column-rule: 1px solid var(--border);
