@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preload" as="image" href="background.jpg">
+<title>😎Family Chat</title>
+<style type="text/css">
+/* WhatsApp-To-HTML Styles */
+
+:root {
+  --background: #111111;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --chat-outgoing: #0d9488;
+  --chat-outgoing-foreground: #ffffff;
+  --chat-incoming: #f8f8f8;
+  --chat-incoming-foreground: #1a1a1a;
+  --primary: #0d9488;
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  background: var(--background);
+  color: var(--foreground);
+  padding: 0;
+  margin: 0;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#wrapper {
+  max-width: 72rem; /* 672px - matches max-w-2xl */
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+}
+
+/* Header */
+header.title {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+header.title .content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+
+header.title .content .header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+header.title .avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 0.875rem;
+}
+
+header.title h1 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+  text-shadow: none;
+}
+
+header.title .subtitle {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+header.title .nav-button {
+  display: none; /* Hide old nav buttons, use scroll buttons instead */
+}
+
+/* Conversation Container */
+ol.conversation {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  overflow-y: auto;
+  background: var(--background);
+  background-image: url("background.jpg");
+  background-repeat: repeat-y;
+  background-size: 100%;
+  list-style: none;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Date Separator */
+ol.conversation li.date-time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+  list-style: none;
+}
+
+ol.conversation li.date-time p {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  background: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  margin: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+ol.conversation li.date-time p::before {
+  content: "📅";
+  font-size: 0.875rem;
+}
+
+/* Message Groups */
+ol.conversation li.left,
+ol.conversation li.right {
+  display: flex;
+  width: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ol.conversation li.left {
+  justify-content: flex-start;
+}
+
+ol.conversation li.right {
+  justify-content: flex-end;
+}
+
+ol.conversation li ol.messages {
+  max-width: 31.5rem;
+  overflow: hidden;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Message Bubble */
+ol.conversation li.right ol.messages {
+  border-radius: var(--radius);
+  background: var(--chat-outgoing);
+  color: var(--chat-outgoing-foreground);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+ol.conversation li.left ol.messages {
+  border-radius: var(--radius);
+  background: var(--chat-incoming);
+  color: var(--chat-incoming-foreground);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* User Picture - Hidden in modern design */
+ol.conversation li ol.messages li.user-picture {
+  display: none;
+}
+
+/* User Name */
+ol.conversation li ol.messages li.user-name {
+  padding: 0.5rem 0.75rem 0 0.75rem;
+  margin: 0;
+  list-style: none;
+}
+
+ol.conversation li.left ol.messages li.user-name p {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin: 0;
+  padding: 0;
+}
+
+ol.conversation li.right ol.messages li.user-name p {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  padding: 0;
+}
+
+ol.conversation li.right ol.messages li.user-name p:empty {
+  display: none;
+}
+
+/* Messages */
+ol.conversation li ol.messages li.message {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+ol.conversation li ol.messages li.message p {
+  padding: 0.5rem 0.75rem;
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+ol.conversation li.right ol.messages li.message p {
+  color: var(--chat-outgoing-foreground);
+}
+
+ol.conversation li.left ol.messages li.message p {
+  color: var(--chat-incoming-foreground);
+}
+
+/* Message Time */
+ol.conversation li ol.messages li.message .hours {
+  display: block;
+  font-size: 0.625rem;
+  margin-top: 0.25rem;
+  text-align: right;
+  padding: 0 0.75rem 0.5rem 0.75rem;
+}
+
+ol.conversation li.right ol.messages li.message .hours {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+ol.conversation li.left ol.messages li.message .hours {
+  color: var(--muted-foreground);
+}
+
+/* Image Messages */
+ol.conversation li ol.messages li.message.image {
+  padding: 0;
+  margin: 0;
+  background: none;
+}
+
+ol.conversation li ol.messages li.message.image a.shared {
+  display: block;
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+
+ol.conversation li ol.messages li.message.image a.shared img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+/* Image with text below - remove bottom border radius from image */
+ol.conversation li ol.messages li.message.image:has(+ li.message) a.shared img {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Text message following image - remove top border radius */
+ol.conversation li ol.messages li.message.image + li.message {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-top: 0;
+}
+
+ol.conversation li ol.messages li.message.image .hours {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  color: white;
+}
+
+ol.conversation li ol.messages li.message.image a.shared span.zoom {
+  display: none;
+}
+
+/* Video Messages */
+ol.conversation li ol.messages li.message.video {
+  position: relative;
+  width: 256px;
+  height: 192px;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+ol.conversation li.right ol.messages li.message.video {
+  border-bottom-right-radius: var(--radius);
+}
+
+ol.conversation li.left ol.messages li.message.video {
+  border-bottom-left-radius: var(--radius);
+}
+
+/* Video with text below - remove bottom border radius from video */
+ol.conversation li ol.messages li.message.video:has(+ li.message) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Text message following video - remove top border radius */
+ol.conversation li ol.messages li.message.video + li.message {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-top: 0;
+}
+
+ol.conversation li ol.messages li.message.video a.shared {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* Blurred circle background */
+ol.conversation li ol.messages li.message.video a.shared::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3.5rem;
+  height: 3.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 50%;
+  transition: transform 0.3s;
+  z-index: 1;
+}
+
+/* Play icon on top */
+ol.conversation li ol.messages li.message.video a.shared::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3.5rem;
+  height: 3.5rem;
+  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iNCA0IDI0IDI0Ij48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMjYgOS45M3YxMi4xNDNjMCAuMzEzLS4xNDUuNTMyLS40MzUuNjZhLjc4My43ODMgMCAwIDEtLjI4LjA1NWMtLjIgMC0uMzY3LS4wNy0uNTAyLS4yMTJsLTQuNDk4LTQuNDk4djEuODUzYzAgLjg4Ni0uMzE0IDEuNjQ0LS45NDMgMi4yNzItLjYzLjYzLTEuMzg2Ljk0My0yLjI3Ljk0M0g5LjIxNGEzLjA5NCAzLjA5NCAwIDAgMS0yLjI3LS45NDNBMy4wOTUgMy4wOTUgMCAwIDEgNiAxOS45MzJ2LTcuODU4YzAtLjg4NS4zMTUtMS42NDMuOTQ0LTIuMjdzMS4zODYtLjk0NiAyLjI3LS45NDZoNy44NThjLjg4NSAwIDEuNjQzLjMxNCAyLjI3Ljk0My42My42My45NDQgMS4zODcuOTQ0IDIuMjcydjEuODRsNC40OTgtNC40ODZjLjEzNC0uMTQuMy0uMjEyLjUwMy0uMjEyLjA5IDAgLjE4Mi4wMi4yOC4wNTYuMjg4LjEyOC40MzMuMzQ3LjQzMy42NnoiLz48L3N2Zz4=') no-repeat center center;
+  background-size: 24px 24px;
+  opacity: 0.9;
+  transition: opacity 0.3s;
+  z-index: 2;
+}
+
+ol.conversation li ol.messages li.message.video a.shared:hover::before {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+ol.conversation li ol.messages li.message.video a.shared:hover::after {
+  opacity: 1;
+}
+
+ol.conversation li ol.messages li.message.video a.shared p {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  color: white;
+  font-size: 0.625rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+ol.conversation li ol.messages li.message.video a.shared:hover p {
+  opacity: 0.8;
+}
+
+ol.conversation li ol.messages li.message.video .hours {
+  display: none;
+}
+
+/* File Messages */
+ol.conversation li ol.messages li.message.file p {
+  padding-left: 2rem;
+  position: relative;
+}
+
+ol.conversation li ol.messages li.message.file p::before {
+  content: "📎";
+  position: absolute;
+  left: 0.75rem;
+  top: 0.5rem;
+  font-size: 1rem;
+  opacity: 0.5;
+}
+
+/* Clear fix */
+ol.conversation li.clear {
+  display: none;
+}
+
+/* Footer */
+#footer {
+  border-top: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  padding: 0.75rem 1rem;
+  text-align: center;
+}
+
+#footer p {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  padding: 0;
+}
+
+/* Scroll Buttons */
+.scroll-buttons {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 20;
+}
+
+.scroll-button {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--card);
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 1.25rem;
+  color: var(--foreground);
+}
+
+.scroll-button:hover {
+  background: var(--muted);
+}
+
+.scroll-button.hidden {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #wrapper {
+    max-width: 100%;
+  }
+
+  ol.conversation li ol.messages {
+    max-width: 85%;
+  }
+}
+
+/* Print Styles */
+@media print {
+  header.title {
+    position: relative;
+  }
+
+  .scroll-buttons {
+    display: none;
+  }
+
+  ol.conversation li ol.messages li.message .hours {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+</style>
+<script>
+// Preload background image to prevent flash on load and navigation
+(function() {
+    const bgImage = new Image();
+    bgImage.src = 'background.jpg';
+})();
+
+// Scroll buttons functionality
+(function() {
+    const container = document.querySelector('ol.conversation');
+    const scrollButtons = document.getElementById('scroll-buttons');
+    const btnUp = document.getElementById('scroll-up');
+    const btnDown = document.getElementById('scroll-down');
+    
+    if (!container || !scrollButtons) return;
+    
+    function updateScrollButtons() {
+        const scrollTop = container.scrollTop;
+        const scrollHeight = container.scrollHeight;
+        const clientHeight = container.clientHeight;
+        
+        if (btnUp) {
+            btnUp.classList.toggle('hidden', scrollTop <= 100);
+        }
+        if (btnDown) {
+            btnDown.classList.toggle('hidden', scrollTop >= scrollHeight - clientHeight - 100);
+        }
+    }
+    
+    container.addEventListener('scroll', updateScrollButtons);
+    updateScrollButtons();
+    
+    if (btnUp) {
+        btnUp.addEventListener('click', function() {
+            container.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+    
+    if (btnDown) {
+        btnDown.addEventListener('click', function() {
+            container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+        });
+    }
+})();
+
+// Lightbox functionality for images and videos
+(function() {
+    // Create lightbox element
+    const lightbox = document.createElement('div');
+    lightbox.className = 'lightbox';
+    lightbox.innerHTML = `
+        <button class="lightbox-close" aria-label="Close">×</button>
+        <div class="lightbox-content"></div>
+    `;
+    document.body.appendChild(lightbox);
+    
+    const lightboxContent = lightbox.querySelector('.lightbox-content');
+    const closeButton = lightbox.querySelector('.lightbox-close');
+    
+    function openLightbox(mediaUrl, isVideo) {
+        lightboxContent.innerHTML = '';
+        
+        if (isVideo) {
+            const video = document.createElement('video');
+            video.src = mediaUrl;
+            video.controls = true;
+            video.autoplay = true;
+            lightboxContent.appendChild(video);
+        } else {
+            const img = document.createElement('img');
+            img.src = mediaUrl;
+            lightboxContent.appendChild(img);
+        }
+        
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        // Stop video playback
+        const video = lightboxContent.querySelector('video');
+        if (video) {
+            video.pause();
+            video.src = '';
+        }
+    }
+    
+    // Handle clicks on media links
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('a.shared');
+        if (!link) return;
+        
+        e.preventDefault();
+        const mediaUrl = link.getAttribute('href');
+        
+        // Determine if it's a video or image
+        const isVideo = /\.(mp4|mov|avi|mkv)$/i.test(mediaUrl);
+        const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(mediaUrl);
+        
+        if (isVideo || isImage) {
+            openLightbox(mediaUrl, isVideo);
+        } else {
+            // For other file types, open in new tab
+            window.open(mediaUrl, '_blank');
+        }
+    });
+    
+    // Close on close button click
+    closeButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        closeLightbox();
+    });
+    
+    // Close on lightbox background click
+    lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+    
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            closeLightbox();
+        }
+    });
+})();
+</script>
+</head>
+<body>
+<div id="wrapper">
+    <header class="title">
+        <div class="content">
+            <div class="header-left">
+                <div>
+                    <h1 style="padding-top: 10px; padding-bottom: 10px;">😎Family Chat</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <ol class="conversation">
+        <li class="date-time">
+            <p>13 December 2024</p>
+        </li>
+        <li class="right">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Alex</p>
+                </li>
+                <li class="message video">
+                    <a class="shared" href="example_whatsapp_chat_data/00000004-VIDEO-2024-12-13-07-57-51.mp4">
+                        <p>00000004-VIDEO-2024-12-13-07-57-51.mp4</p>
+                    </a>
+                    <span class="hours">07:57:51</span>
+                </li>
+            </ol>
+        </li>
+        <li class="left">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Mom</p>
+                </li>
+                <li class="message">
+                    <p>Oh how cute! 🥰🥰🥰👍♥️</p>
+                    <span class="hours">08:13:14</span>
+                </li>
+            </ol>
+        </li>
+        <li class="date-time">
+            <p>14 December 2024</p>
+        </li>
+        <li class="right">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Alex</p>
+                </li>
+                <li class="message image">
+                    <a class="shared" href="example_whatsapp_chat_data/00000006-PHOTO-2024-12-14-09-50-09.jpg">
+                        <img class="img-shared" src="example_whatsapp_chat_data/00000006-PHOTO-2024-12-14-09-50-09.jpg">
+                        <span class="zoom"></span>
+                    </a>
+                    <span class="hours">09:50:09</span>
+                </li>
+            </ol>
+        </li>
+        <li class="left">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Mom</p>
+                </li>
+                <li class="message">
+                    <p>Did Emma write that or was it Jake?🥰👍🥰</p>
+                    <span class="hours">09:52:06</span>
+                </li>
+            </ol>
+        </li>
+        <li class="right">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Alex</p>
+                </li>
+                <li class="message">
+                    <p>It was Jake ☺️</p>
+                    <span class="hours">09:55:41</span>
+                </li>
+            </ol>
+        </li>
+        <li class="left">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Mom</p>
+                </li>
+                <li class="message">
+                    <p>Well done 🥰👍</p>
+                    <span class="hours">09:59:19</span>
+                </li>
+            </ol>
+        </li>
+        <li class="right">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Alex</p>
+                </li>
+                <li class="message image">
+                    <a class="shared" href="example_whatsapp_chat_data/00000010-PHOTO-2024-12-14-09-59-49.jpg">
+                        <img class="img-shared" src="example_whatsapp_chat_data/00000010-PHOTO-2024-12-14-09-59-49.jpg">
+                        <span class="zoom"></span>
+                    </a>
+                </li>
+                <li class="message">
+                    <p>Emma wrote this ☺️ Well, she started and didn&#x27;t finish because she got so tired she almost cried 😅 (Jake helped her)</p>
+                    <span class="hours">09:59:49</span>
+                </li>
+            </ol>
+        </li>
+        <li class="left">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Mom</p>
+                </li>
+                <li class="message">
+                    <p>😄😄😄</p>
+                    <span class="hours">10:00:47</span>
+                </li>
+            </ol>
+        </li>
+        <li class="date-time">
+            <p>22 December 2024</p>
+        </li>
+        <li class="left">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Sarah</p>
+                </li>
+                <li class="message image">
+                    <a class="shared" href="example_whatsapp_chat_data/00000023-PHOTO-2024-12-22-08-47-36.jpg">
+                        <img class="img-shared" src="example_whatsapp_chat_data/00000023-PHOTO-2024-12-22-08-47-36.jpg">
+                        <span class="zoom"></span>
+                    </a>
+                    <span class="hours">08:47:36</span>
+                </li>
+            </ol>
+        </li>
+        <li class="left">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Mom</p>
+                </li>
+                <li class="message">
+                    <p>That looks so delicious!😋😋<br>Well done Jake!🥰</p>
+                    <span class="hours">09:09:09</span>
+                </li>
+            </ol>
+        </li>
+        <li class="right">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Alex</p>
+                </li>
+                <li class="message image">
+                    <a class="shared" href="example_whatsapp_chat_data/00000027-PHOTO-2024-12-22-20-36-00.jpg">
+                        <img class="img-shared" src="example_whatsapp_chat_data/00000027-PHOTO-2024-12-22-20-36-00.jpg">
+                        <span class="zoom"></span>
+                    </a>
+                    <span class="hours">20:36:00</span>
+                </li>
+            </ol>
+        </li>
+        <li class="right">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Alex</p>
+                </li>
+                <li class="message video">
+                    <a class="shared" href="example_whatsapp_chat_data/00000028-VIDEO-2024-12-22-20-36-00.mp4">
+                        <p>00000028-VIDEO-2024-12-22-20-36-00.mp4</p>
+                    </a>
+                    <span class="hours">20:36:00</span>
+                </li>
+            </ol>
+        </li>
+        <li class="right">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Alex</p>
+                </li>
+                <li class="message image">
+                    <a class="shared" href="example_whatsapp_chat_data/00000029-PHOTO-2024-12-22-20-36-01.jpg">
+                        <img class="img-shared" src="example_whatsapp_chat_data/00000029-PHOTO-2024-12-22-20-36-01.jpg">
+                        <span class="zoom"></span>
+                    </a>
+                    <span class="hours">20:36:01</span>
+                </li>
+            </ol>
+        </li>
+        <li class="date-time">
+            <p>23 December 2024</p>
+        </li>
+        <li class="left">
+            <ol class="messages">
+                <li class="user-name">
+                    <p>Mom</p>
+                </li>
+                <li class="message">
+                    <p>Wow! What a beautiful Christmas market!👍🥰<br>Enjoy!😋😋😋</p>
+                    <span class="hours">15:28:34</span>
+                </li>
+            </ol>
+        </li>
+    </ol>
+    
+    <div id="scroll-buttons" class="scroll-buttons">
+        <button id="scroll-up" class="scroll-button hidden" aria-label="Scroll to top">↑</button>
+        <button id="scroll-down" class="scroll-button" aria-label="Scroll to bottom">↓</button>
+    </div>
+    
+    <footer id="footer">
+        <p>14 messages • Exported from WhatsApp</p>
+    </footer>
+</div>
+</body>
+</html>
