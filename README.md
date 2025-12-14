@@ -4,17 +4,34 @@ A Python tool that converts exported WhatsApp chat files into beautifully format
 
 <img width="800" height="876" alt="image" src="https://github.com/user-attachments/assets/080e8b49-998d-4d90-82fb-1a5af338135f" />
 
+## How to run (quick commands during development)
+
+```bash
+# Complete conversion with recommended options
+python3 convert_all.py my_whatsapp_data --delete-original
+```
+
+```bash
+# Rerun html generation (e.g., if `convert_whatsapp_to_html.py` script changes)
+python3 convert_whatsapp_to_html.py my_whatsapp_data
+```
+
+
 ## Requirements
 
 - A WhatsApp chat export (see instructions below)
 - Python 3.6 or higher (no additional Python packages are required as it uses only standard library)
+- **ffmpeg** (optional, but recommended if your chat contains .mov video files) - See installation instructions below
 
 ## Installation
 
 Clone this repository to your local machine. The directory structure should look like this:
 ```
 whatsapp-to-html/
+├── convert_all.py          # Master script (recommended)
 ├── convert_whatsapp_to_html.py
+├── convert_mov_to_mp4.py
+├── update_chat_txt.py
 ├── style.css
 ├── background.jpg
 ├── README.md
@@ -66,21 +83,91 @@ whatsapp-to-html/
 │   └── ...
 ```
 
-### Step 3: Run the Script
+### Step 3: Convert to HTML (Recommended - All-in-One)
 
-Run the Python script with your folder name as an argument (ensure you have Python 3 installed on your system):
+The easiest way to convert your WhatsApp chat is using the master script `convert_all.py`, which automatically runs all necessary steps in the correct order:
+
+1. **Converts .mov files to .mp4** (if your chat contains QuickTime videos)
+2. **Updates _chat.txt** to replace .mov references with .mp4
+3. **Generates the HTML file** from your chat
+
+**Install ffmpeg** (if not already installed and your chat contains .mov files):
+- **Windows**: Download from [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
+- **macOS**: `brew install ffmpeg`
+- **Linux (Ubuntu/Debian)**: `sudo apt-get install ffmpeg`
+- **Linux (CentOS/RHEL)**: `sudo yum install ffmpeg`
+
+**Run the master script:**
 
 ```bash
-python3 convert_whatsapp_to_html.py my_whatsapp_data
+python3 convert_all.py my_whatsapp_data --delete-original
 ```
 
-Replace `my_whatsapp_data` with the name of your WhatsApp data folder.
+**Options:**
+- `--recursive, -r` - Search subdirectories recursively for .mov files
+- `--overwrite, -f` - Overwrite existing .mp4 files
+- `--delete-original` - Delete original .mov files after conversion (recommended to save disk space)
+- `--no-backup` - Don't create backup of _chat.txt before updating
+- `--skip-mov-convert` - Skip .mov to .mp4 conversion step
+- `--skip-update-chat` - Skip _chat.txt update step
+
+**Examples:**
+```bash
+# Complete conversion with recommended options
+python3 convert_all.py my_whatsapp_data --delete-original
+
+# Recursive conversion for nested folders
+python3 convert_all.py my_whatsapp_data --recursive --delete-original
+
+# Skip video conversion if already done
+python3 convert_all.py my_whatsapp_data --skip-mov-convert
+```
+
+**Note:** We recommend using the `--delete-original` flag to save disk space, as the converted .mp4 files will work better in browsers and you won't need the original .mov files anymore.
 
 ### Step 4: View Your Chat
 
 - The script will generate a file called `my_whatsapp_data_chat.html` in the same directory
 - Double-click the HTML file to open it in your web browser
-- **Important:** **The HTML output file, the `background.jpg` and `styles.css` files must be in the same directory as your WhatsApp data folder for images and media to load and display correctly.** This is especially important if you want to move the files to another folder or an external drive like a USB stick.
+- **Important:** **The HTML output file, the `background.jpg` and `style.css` files must be in the same directory as your WhatsApp data folder for images and media to load and display correctly.** This is especially important if you want to move the files to another folder or an external drive like a USB stick.
+
+## Advanced Usage: Individual Scripts
+
+For more fine-grained control, you can run each script separately:
+
+### Step 1: Convert .mov Files to .mp4
+
+If your WhatsApp chat contains QuickTime (.mov) video files, convert them to .mp4 format for better browser compatibility:
+
+```bash
+python3 convert_mov_to_mp4.py my_whatsapp_data --delete-original
+```
+
+**Options:**
+- `--recursive, -r` - Search subdirectories recursively
+- `--overwrite, -f` - Overwrite existing .mp4 files
+- `--delete-original` - Delete original .mov files after successful conversion
+
+### Step 2: Update _chat.txt
+
+Update the chat file to replace .mov references with .mp4:
+
+```bash
+python3 update_chat_txt.py my_whatsapp_data/
+```
+
+**Options:**
+- `--no-backup` - Don't create a backup of _chat.txt before updating
+
+**Note:** A timestamped backup of `_chat.txt` is created automatically (e.g., `_chat.txt.backup_20241225_143022`) in the same directory.
+
+### Step 3: Generate HTML
+
+Convert the chat to HTML:
+
+```bash
+python3 convert_whatsapp_to_html.py my_whatsapp_data
+```
 
 ## Language Support
 
@@ -107,7 +194,10 @@ After running the script, your directory structure should look like this:
 
 ```
 whatsapp-to-html/
+├── convert_all.py
 ├── convert_whatsapp_to_html.py
+├── convert_mov_to_mp4.py
+├── update_chat_txt.py
 ├── style.css
 ├── background.jpg
 ├── README.md
