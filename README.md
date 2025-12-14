@@ -12,7 +12,7 @@ python3 generate_html.py my_whatsapp_data --delete-original
 ```
 
 ```bash
-# Rerun html generation (e.g., if `scripts/convert_whatsapp_to_html.py` script changes)
+# Rerun HTML generation (e.g., if `scripts/convert_whatsapp_to_html.py` script changes)
 python3 scripts/convert_whatsapp_to_html.py my_whatsapp_data
 ```
 
@@ -21,7 +21,7 @@ python3 scripts/convert_whatsapp_to_html.py my_whatsapp_data
 
 - A WhatsApp chat export (see instructions below)
 - Python 3.6 or higher (no additional Python packages are required as it uses only standard library)
-- **ffmpeg** (optional, but recommended if your chat contains .mov video files) - See installation instructions below
+- **ffmpeg** (required if your chat contains .mov video files) - See installation instructions below
 
 ## Installation
 
@@ -67,7 +67,7 @@ whatsapp-to-html/
 
 * Extract the zip file on your local machine
 * Place the extracted folder within the cloned repository (where the `generate_html.py` file resides).
-* Name the extracted folder to whatever you like (e.g., `my_whatsapp_data`). Avoid using special characters like ä, ö, ü, etc., to prevent issues during processing.
+* Give the extracted folder any name you prefer (for example, `my_whatsapp_data`). The generated HTML file will use this folder name as a prefix (e.g., `my_whatsapp_data_chat.html`). To prevent issues during processing, avoid using special characters such as ä, ö, ü, etc..
 
 Your directory structure should now look like this:
 ```
@@ -126,17 +126,64 @@ python3 generate_html.py my_whatsapp_data --recursive --delete-original
 python3 generate_html.py my_whatsapp_data --skip-mov-convert
 ```
 
-**Note:** We recommend using the `--delete-original` flag to save disk space, as the converted .mp4 files will work better in browsers and you won't need the original .mov files anymore.
+**Note:** It is recommended to use the `--delete-original` flag to save disk space, as you won't need the original .mov files anymore.
+
+After running the script, your directory structure should look like this:
+
+```
+whatsapp-to-html/
+├── generate_html.py
+├── scripts/
+│   ├── convert_whatsapp_to_html.py
+│   ├── convert_mov_to_mp4.py
+│   └── update_chat_txt.py
+├── style.css
+├── background.jpg
+├── README.md
+├── CONTRIBUTING.md
+├── .gitignore
+├── my_whatsapp_data/
+│   ├── _chat.txt
+│   ├── [photos and videos]
+│   └── ...
+└── my_whatsapp_data_chat.html (generated)
+```
 
 ### Step 4: View Your Chat
 
 - The script will generate a file called `my_whatsapp_data_chat.html` in the same directory
 - Double-click the HTML file to open it in your web browser
-- **Important:** If you want to move the files to another folder or drive (external storage or USB), you have to move the following files to ensure that the html will load and display images and media correctly:
-   - Your WhatsApp data folder `my_whatsapp_data`
+
+## Moving Files to a Different Location
+
+If you want to move the files to another folder or drive (external storage or USB), you have to move the following files to ensure that the HTML will load and display images and media correctly:
+   - Your WhatsApp data folder (e.g., `my_whatsapp_data`)
    - The HTML output file (e.g., `my_whatsapp_data_chat.html`)
    - `background.jpg`
    - `style.css`
+
+
+## Customization
+
+You can replace `background.jpg` with your own background image. The file must be named `background.jpg`. You don't have to rerun the HTML generation.
+
+You can find free background images on [freepik.com](https://www.freepik.com/free-photos-vectors/simple-doodle-background/3#uuid=8c9be20a-6071-4b39-ac3a-94efe1277c55).
+
+
+## Language Support
+
+The tool automatically detects the language of your WhatsApp export and adapts accordingly:
+
+- **Supported languages**: German, English, Spanish, French, Italian
+- **Date formats**: Supports both European (DD.MM.YY) and US (MM/DD/YY) date formats
+- **Auto-detection**: The language is automatically detected from your chat content
+- **Month names**: Displayed in the detected language (e.g., "January" in English, "Januar" in German)
+
+**Note**: The current version has been tested using German WhatsApp exports only. While the tool is designed to support multiple languages, other languages may need additional testing and refinement.
+
+
+
+
 
 ## Advanced Usage: Individual Scripts
 
@@ -176,44 +223,4 @@ Convert the chat to HTML:
 python3 scripts/convert_whatsapp_to_html.py my_whatsapp_data
 ```
 
-## Language Support
 
-The tool automatically detects the language of your WhatsApp export and adapts accordingly:
-
-- **Supported languages**: German, English, Spanish, French, Italian
-- **Date formats**: Supports both European (DD.MM.YY) and US (MM/DD/YY) date formats
-- **Auto-detection**: The language is automatically detected from your chat content
-- **Month names**: Displayed in the detected language (e.g., "January" in English, "Januar" in German)
-
-**Note**: The current version has been tested using German WhatsApp exports only. While the tool is designed to support multiple languages, other languages may need additional testing and refinement.
-
-## Customization
-
-### Background Image
-
-- You can replace `background.jpg` with your own background image
-- The file must be named `background.jpg`
-- You can find free background images on [freepik.com](https://www.freepik.com/free-photos-vectors/simple-doodle-background/3#uuid=8c9be20a-6071-4b39-ac3a-94efe1277c55)
-
-## File Structure
-
-After running the script, your directory structure should look like this:
-
-```
-whatsapp-to-html/
-├── generate_html.py
-├── scripts/
-│   ├── convert_whatsapp_to_html.py
-│   ├── convert_mov_to_mp4.py
-│   └── update_chat_txt.py
-├── style.css
-├── background.jpg
-├── README.md
-├── CONTRIBUTING.md
-├── .gitignore
-├── my_whatsapp_data/
-│   ├── _chat.txt
-│   ├── [photos and videos]
-│   └── ...
-└── my_whatsapp_data_chat.html (generated)
-```
