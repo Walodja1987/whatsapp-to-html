@@ -4,7 +4,7 @@ A Python tool that converts exported WhatsApp chat files into beautifully format
 
 <img width="800" height="876" alt="image" src="https://github.com/user-attachments/assets/080e8b49-998d-4d90-82fb-1a5af338135f" />
 
-## How to run (quick commands during development)
+<!-- ## How to run (quick commands during development)
 
 ```bash
 # Complete conversion with recommended options
@@ -14,7 +14,7 @@ python3 generate_html.py my_whatsapp_data --delete-original
 ```bash
 # Rerun HTML generation (e.g., if `scripts/convert_whatsapp_to_html.py` script changes)
 python3 scripts/convert_whatsapp_to_html.py my_whatsapp_data
-```
+``` -->
 
 
 ## Requirements
@@ -35,10 +35,14 @@ whatsapp-to-html/
 │   └── update_chat_txt.py
 ├── style.css
 ├── background.jpg
+├── example_whatsapp_chat_data/           # Example whatsapp chat data
+├── example_whatsapp_chat_data_chat.html  # Example output HTML
 ├── README.md
 ├── CONTRIBUTING.md
 ├── .gitignore
 ```
+
+**Note:** The repository includes a `example_whatsapp_chat_data` folder with example data. You can view the example output by opening `example_whatsapp_chat_data_chat.html`.
 
 
 ## Usage
@@ -69,6 +73,8 @@ whatsapp-to-html/
 * Place the extracted folder within the cloned repository (where the `generate_html.py` file resides).
 * Give the extracted folder any name you prefer (for example, `my_whatsapp_data`). The generated HTML file will use this folder name as a prefix (e.g., `my_whatsapp_data_chat.html`). To prevent issues during processing, avoid using special characters such as ä, ö, ü, etc..
 
+**Tip:** Want to try the tool first? The repository includes a `example_whatsapp_chat_data` folder with example data. You can test the conversion with: `python3 generate_html.py example_whatsapp_chat_data` or view the example output by opening `example_whatsapp_chat_data_chat.html` in your browser.
+
 Your directory structure should now look like this:
 ```
 whatsapp-to-html/
@@ -77,10 +83,12 @@ whatsapp-to-html/
 │   └── ...
 ├── style.css
 ├── background.jpg
+├── example_whatsapp_chat_data/
+├── example_whatsapp_chat_data_chat.html
 ├── README.md
 ├── CONTRIBUTING.md
 ├── .gitignore
-├── my_whatsapp_data/ (added)
+├── my_whatsapp_data/    # Added
 │   ├── _chat.txt
 │   ├── [photos and videos]
 │   └── ...
@@ -139,6 +147,8 @@ whatsapp-to-html/
 │   └── update_chat_txt.py
 ├── style.css
 ├── background.jpg
+├── example_whatsapp_chat_data/
+├── example_whatsapp_chat_data_chat.html
 ├── README.md
 ├── CONTRIBUTING.md
 ├── .gitignore
@@ -146,7 +156,7 @@ whatsapp-to-html/
 │   ├── _chat.txt
 │   ├── [photos and videos]
 │   └── ...
-└── my_whatsapp_data_chat.html (generated)
+└── my_whatsapp_data_chat.html    # Generated
 ```
 
 ### Step 4: View Your Chat
