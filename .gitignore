@@ -1,6 +1,10 @@
 # Ignore all directories
 **/
+# Except example_whatsapp_chat_data directory
+!example_whatsapp_chat_data/
 
 # Ignore all HTML files
 *.html
+# Except example_whatsapp_chat_data directory
+!example_whatsapp_chat_data_chat.html
 
