@@ -22,7 +22,7 @@ def run_command(script_name, args, description):
     Returns:
         True if successful, False otherwise
     """
-    script_path = Path(__file__).parent / script_name
+    script_path = Path(__file__).parent / 'scripts' / script_name
     
     if not script_path.exists():
         print(f"❌ Script not found: {script_name}")
@@ -60,7 +60,7 @@ def main():
     # Parse command line arguments
     if len(sys.argv) < 2:
         print("Usage:")
-        print("  python3 convert_all.py <whatsapp_folder> [options]")
+        print("  python3 generate_html.py <whatsapp_folder> [options]")
         print()
         print("Options (passed to conversion script):")
         print("  --recursive, -r       Search subdirectories recursively for .mov files")
@@ -71,9 +71,9 @@ def main():
         print("  --skip-update-chat    Skip _chat.txt update step")
         print()
         print("Examples:")
-        print("  python3 convert_all.py my_whatsapp_data")
-        print("  python3 convert_all.py my_whatsapp_data --delete-original")
-        print("  python3 convert_all.py my_whatsapp_data --recursive --delete-original")
+        print("  python3 generate_html.py my_whatsapp_data")
+        print("  python3 generate_html.py my_whatsapp_data --delete-original")
+        print("  python3 generate_html.py my_whatsapp_data --recursive --delete-original")
         return
     
     folder_path = Path(sys.argv[1])

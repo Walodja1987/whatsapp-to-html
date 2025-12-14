@@ -8,12 +8,12 @@ A Python tool that converts exported WhatsApp chat files into beautifully format
 
 ```bash
 # Complete conversion with recommended options
-python3 convert_all.py my_whatsapp_data --delete-original
+python3 generate_html.py my_whatsapp_data --delete-original
 ```
 
 ```bash
-# Rerun html generation (e.g., if `convert_whatsapp_to_html.py` script changes)
-python3 convert_whatsapp_to_html.py my_whatsapp_data
+# Rerun html generation (e.g., if `scripts/convert_whatsapp_to_html.py` script changes)
+python3 scripts/convert_whatsapp_to_html.py my_whatsapp_data
 ```
 
 
@@ -28,10 +28,11 @@ python3 convert_whatsapp_to_html.py my_whatsapp_data
 Clone this repository to your local machine. The directory structure should look like this:
 ```
 whatsapp-to-html/
-├── convert_all.py          # Master script (recommended)
-├── convert_whatsapp_to_html.py
-├── convert_mov_to_mp4.py
-├── update_chat_txt.py
+├── generate_html.py         # Main entry point
+├── scripts/
+│   ├── convert_whatsapp_to_html.py
+│   ├── convert_mov_to_mp4.py
+│   └── update_chat_txt.py
 ├── style.css
 ├── background.jpg
 ├── README.md
@@ -49,7 +50,7 @@ whatsapp-to-html/
 * **Select the chat** you want to export
 * Tap on the chat **name at the top**
 * **Scroll to the bottom** where you will find **"Export chat"**
-* Click on it and select whether you want to download it with or without media
+* Click on it and select whether you want to download it *with* or *without* media
 * Slide the second line to the right, click on "More" (three dots icon), and choose where to save the zip file. It is recommended to choose Google Drive or Dropbox and then download it to your local machine afterwards, or email it to yourself.
 
 **On Android:**
@@ -65,13 +66,15 @@ whatsapp-to-html/
 ### Step 2: Prepare Your Data
 
 * Extract the zip file on your local machine
-* Place the extracted folder within the cloned repository (where the `convert_whatsapp_to_html.py` file resides).
+* Place the extracted folder within the cloned repository (where the `generate_html.py` file resides).
 * Name the extracted folder to whatever you like (e.g., `my_whatsapp_data`). Avoid using special characters like ä, ö, ü, etc., to prevent issues during processing.
 
 Your directory structure should now look like this:
 ```
 whatsapp-to-html/
-├── convert_whatsapp_to_html.py
+├── generate_html.py
+├── scripts/
+│   └── ...
 ├── style.css
 ├── background.jpg
 ├── README.md
@@ -83,9 +86,9 @@ whatsapp-to-html/
 │   └── ...
 ```
 
-### Step 3: Convert to HTML (Recommended - All-in-One)
+### Step 3: Convert to HTML
 
-The easiest way to convert your WhatsApp chat is using the master script `convert_all.py`, which automatically runs all necessary steps in the correct order:
+The easiest way to convert your WhatsApp chat is using the main script `generate_html.py`, which automatically runs all necessary steps in the correct order:
 
 1. **Converts .mov files to .mp4** (if your chat contains QuickTime videos)
 2. **Updates _chat.txt** to replace .mov references with .mp4
@@ -97,10 +100,10 @@ The easiest way to convert your WhatsApp chat is using the master script `conver
 - **Linux (Ubuntu/Debian)**: `sudo apt-get install ffmpeg`
 - **Linux (CentOS/RHEL)**: `sudo yum install ffmpeg`
 
-**Run the master script:**
+**Run the main script:**
 
 ```bash
-python3 convert_all.py my_whatsapp_data --delete-original
+python3 generate_html.py my_whatsapp_data --delete-original
 ```
 
 **Options:**
@@ -114,13 +117,13 @@ python3 convert_all.py my_whatsapp_data --delete-original
 **Examples:**
 ```bash
 # Complete conversion with recommended options
-python3 convert_all.py my_whatsapp_data --delete-original
+python3 generate_html.py my_whatsapp_data --delete-original
 
 # Recursive conversion for nested folders
-python3 convert_all.py my_whatsapp_data --recursive --delete-original
+python3 generate_html.py my_whatsapp_data --recursive --delete-original
 
 # Skip video conversion if already done
-python3 convert_all.py my_whatsapp_data --skip-mov-convert
+python3 generate_html.py my_whatsapp_data --skip-mov-convert
 ```
 
 **Note:** We recommend using the `--delete-original` flag to save disk space, as the converted .mp4 files will work better in browsers and you won't need the original .mov files anymore.
@@ -129,7 +132,11 @@ python3 convert_all.py my_whatsapp_data --skip-mov-convert
 
 - The script will generate a file called `my_whatsapp_data_chat.html` in the same directory
 - Double-click the HTML file to open it in your web browser
-- **Important:** **The HTML output file, the `background.jpg` and `style.css` files must be in the same directory as your WhatsApp data folder for images and media to load and display correctly.** This is especially important if you want to move the files to another folder or an external drive like a USB stick.
+- **Important:** If you want to move the files to another folder or drive (external storage or USB), you have to move the following files to ensure that the html will load and display images and media correctly:
+   - Your WhatsApp data folder `my_whatsapp_data`
+   - The HTML output file (e.g., `my_whatsapp_data_chat.html`)
+   - `background.jpg`
+   - `style.css`
 
 ## Advanced Usage: Individual Scripts
 
@@ -140,7 +147,7 @@ For more fine-grained control, you can run each script separately:
 If your WhatsApp chat contains QuickTime (.mov) video files, convert them to .mp4 format for better browser compatibility:
 
 ```bash
-python3 convert_mov_to_mp4.py my_whatsapp_data --delete-original
+python3 scripts/convert_mov_to_mp4.py my_whatsapp_data --delete-original
 ```
 
 **Options:**
@@ -153,7 +160,7 @@ python3 convert_mov_to_mp4.py my_whatsapp_data --delete-original
 Update the chat file to replace .mov references with .mp4:
 
 ```bash
-python3 update_chat_txt.py my_whatsapp_data/
+python3 scripts/update_chat_txt.py my_whatsapp_data/
 ```
 
 **Options:**
@@ -166,7 +173,7 @@ python3 update_chat_txt.py my_whatsapp_data/
 Convert the chat to HTML:
 
 ```bash
-python3 convert_whatsapp_to_html.py my_whatsapp_data
+python3 scripts/convert_whatsapp_to_html.py my_whatsapp_data
 ```
 
 ## Language Support
@@ -194,10 +201,11 @@ After running the script, your directory structure should look like this:
 
 ```
 whatsapp-to-html/
-├── convert_all.py
-├── convert_whatsapp_to_html.py
-├── convert_mov_to_mp4.py
-├── update_chat_txt.py
+├── generate_html.py
+├── scripts/
+│   ├── convert_whatsapp_to_html.py
+│   ├── convert_mov_to_mp4.py
+│   └── update_chat_txt.py
 ├── style.css
 ├── background.jpg
 ├── README.md
